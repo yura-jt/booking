@@ -1,45 +1,40 @@
 package com.railway.booking.service;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.Assert.assertEquals;
 
 public class PasswordEncryptorTest {
-    private PasswordEncryptor passwordEncryptor;
-
-
-    @Before
-    public void init() {
-        passwordEncryptor = new PasswordEncryptor();
-    }
+    private PasswordEncoder passwordEncryptor = new BCryptPasswordEncoder();
 
     @Test
     public void encryptSimplePass() {
-        String actualHash = passwordEncryptor.encrypt("PASSWORD");
-        String expectedHash = passwordEncryptor.encrypt("PASSWORD");
+        String actualHash = passwordEncryptor.encode("PASSWORD");
+        String expectedHash = passwordEncryptor.encode("PASSWORD");
         assertEquals(expectedHash, actualHash);
     }
 
     @Test
     public void encryptSimplePassWithDigits() {
-        String actualHash = passwordEncryptor.encrypt("PASSWORDmulti298");
-        String expectedHash = passwordEncryptor.encrypt("PASSWORDmulti298");
+        String actualHash = passwordEncryptor.encode("PASSWORDmulti298");
+        String expectedHash = passwordEncryptor.encode("PASSWORDmulti298");
         assertEquals(expectedHash, actualHash);
 
     }
 
     @Test
     public void encryptLongPassWithDigits() {
-        String actualHash = passwordEncryptor.encrypt("PASSWORDmulti298sdfjkehkjUsdlkjhkje9834SD");
-        String expectedHash = passwordEncryptor.encrypt("PASSWORDmulti298sdfjkehkjUsdlkjhkje9834SD");
+        String actualHash = passwordEncryptor.encode("PASSWORDmulti298sdfjkehkjUsdlkjhkje9834SD");
+        String expectedHash = passwordEncryptor.encode("PASSWORDmulti298sdfjkehkjUsdlkjhkje9834SD");
         assertEquals(expectedHash, actualHash);
     }
 
     @Test
     public void encryptComplexPass() {
-        String actualHash = passwordEncryptor.encrypt("4738hsJfl34Sksdl3_@349");
-        String expectedHash = passwordEncryptor.encrypt("4738hsJfl34Sksdl3_@349");
+        String actualHash = passwordEncryptor.encode("4738hsJfl34Sksdl3_@349");
+        String expectedHash = passwordEncryptor.encode("4738hsJfl34Sksdl3_@349");
         assertEquals(expectedHash, actualHash);
     }
 }

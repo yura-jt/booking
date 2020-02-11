@@ -2,13 +2,13 @@ package com.railway.booking.service.impl;
 
 import com.railway.booking.model.User;
 import com.railway.booking.repository.UserRepository;
-import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.UserService;
 import com.railway.booking.service.validator.UserValidator;
 import com.railway.booking.service.validator.ValidateException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,17 +19,17 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
-    private final PasswordEncryptor passwordEncryptor;
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserValidator userValidator;
 
     private static final int USER_PER_PAGE = 5;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator, PasswordEncryptor passwordEncryptor) {
+    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
-        this.passwordEncryptor = passwordEncryptor;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
             String message = String.format("User with such e-mail: %s is already exist", user.getEmail());
             LOGGER.warn(message);
         }
-        String encodedPassword = passwordEncryptor.encrypt(user.getPassword());
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
         userRepository.save(user);
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
             return user;
         }
 
-        String encryptPassword = passwordEncryptor.encrypt(password);
+        String encryptPassword = passwordEncoder.encode(password);
         user = userRepository.findByEmail(email).orElse(null);
 
         if (user == null || !user.getPassword().equals(encryptPassword)) {

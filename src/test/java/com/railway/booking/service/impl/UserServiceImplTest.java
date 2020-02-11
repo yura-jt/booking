@@ -3,7 +3,6 @@ package com.railway.booking.service.impl;
 import com.railway.booking.model.RoleType;
 import com.railway.booking.model.User;
 import com.railway.booking.repository.UserRepository;
-import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.validator.UserValidator;
 import org.junit.After;
 import org.junit.Rule;
@@ -13,6 +12,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -45,7 +45,7 @@ public class UserServiceImplTest {
     private UserRepository userRepository;
 
     @Mock
-    private PasswordEncryptor passwordEncryptor;
+    private PasswordEncoder passwordEncoder;
     @Mock
     private UserValidator userValidator;
     @Rule
@@ -56,31 +56,31 @@ public class UserServiceImplTest {
 
     @After
     public void resetMocks() {
-        reset(userRepository, passwordEncryptor, userValidator);
+        reset(userRepository, passwordEncoder, userValidator);
     }
 
     @Test
     public void userShouldLoginSuccessfully() {
-        when(passwordEncryptor.encrypt(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
+        when(passwordEncoder.encode(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(USER));
 
         final User user = userService.login(USER_EMAIL, PASSWORD);
 
         assertNotNull(user);
-        verify(passwordEncryptor).encrypt(eq(PASSWORD));
+        verify(passwordEncoder).encode(eq(PASSWORD));
         verify(userRepository).findByEmail(eq(USER_EMAIL));
     }
 
     @Test
     public void userShouldNotLoginAsThereIsNotUserWithSuchEmail() {
 //        expectedException.expect(EntityNotFoundException.class);
-        when(passwordEncryptor.encrypt(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
+        when(passwordEncoder.encode(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
         final User user = userService.login(USER_EMAIL, PASSWORD);
 
         assertNull(user);
-        verify(passwordEncryptor).encrypt(eq(PASSWORD));
+        verify(passwordEncoder).encode(eq(PASSWORD));
         verify(userRepository).findByEmail(eq(USER_EMAIL));
     }
 
@@ -89,13 +89,13 @@ public class UserServiceImplTest {
 //        expectedException.expect(EntityNotFoundException.class);
 //        expectedException.expectMessage("User with email: " + USER_EMAIL +
 //                " is not registered or password is not correct");
-        when(passwordEncryptor.encrypt(eq(INCORRECT_PASSWORD))).thenReturn(ENCODE_INCORRECT_PASSWORD);
+        when(passwordEncoder.encode(eq(INCORRECT_PASSWORD))).thenReturn(ENCODE_INCORRECT_PASSWORD);
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(USER));
 
         final User user = userService.login(USER_EMAIL, INCORRECT_PASSWORD);
 
         assertNull(user);
-        verify(passwordEncryptor).encrypt(eq("INCORRECT_PASSWORD"));
+        verify(passwordEncoder).encode(eq("INCORRECT_PASSWORD"));
         verify(userRepository).findByEmail(eq(USER_EMAIL));
     }
 
