@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+    <title>Login page</title>
+    <meta charset="utf-8"/>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link type="text/css" href="../static/css/login.css"
+          th:href="@{css/login.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body id="LoginForm" th:style="'background: url(/static/img/blur.jpg) no-repeat center center fixed;'">
+<div class="container">
+    <h1><span th:text="#{app.title}"></span></h1>
+
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.en}" href="?lang=en">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.ua}" href="?lang=ua">Link</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.ru}" href="?lang=ru">Link</a>
+        </li>
+    </ul>
+
+    <h1 class="form-heading"></h1>
+    <div class="login-form">
+        <div class="main-div">
+            <div class="panel">
+                <h2><span th:text="#{user.login}"></span></h2>
+                <p><span th:text="#{login.message}"></span></p>
+            </div>
+            <form id="Login">
+
+                <div class="form-group">
+                    <input type="email" class="form-control" id="inputEmail" th:placeholder="#{login.email}">
+                </div>
+
+                <div class="form-group">
+                    <input type="password" class="form-control" id="inputPassword" th:placeholder="#{login.password}">
+                </div>
+                <div class="forgot">
+                    <span th:text="#{dont.have.account}"></span>
+                    <a href="registration"><span th:text="#{register}"></span></a>
+                </div>
+                <button type="submit" class="btn btn-primary"><span th:text="#{login.button}"></span></button>
+
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>
