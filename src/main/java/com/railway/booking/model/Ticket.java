@@ -10,13 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity
@@ -61,8 +58,5 @@ public class Ticket {
     @NotNull
     @Column(name = "created_on", nullable = false)
     private LocalDateTime createdOn = LocalDateTime.now();
-
-    @OneToMany(mappedBy = "ticket")
-    private List<Seat> seats = new ArrayList<>();
 
 }

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,6 +25,7 @@ import java.util.List;
 @Table(name = "seats")
 public class Seat {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer integer;
 
     @MapsId
@@ -33,10 +36,6 @@ public class Seat {
     @NotNull
     @Column(name = "number", nullable = false)
     private Integer number;
-
-    @ManyToOne
-    @JoinColumn(name = "ticket_id", foreignKey = @ForeignKey(name = "seats_tickets_FK"))
-    private Ticket ticket;
 
     @ManyToOne
     @JoinColumn(name = "carriage_id", foreignKey = @ForeignKey(name = "seats_carriages_FK"))
