@@ -1,6 +1,8 @@
 package com.railway.booking.model;
 
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,7 @@ import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 @Data
 @Entity
 @Table(name = "users")

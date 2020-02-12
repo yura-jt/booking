@@ -35,24 +35,24 @@ VALUES ('2019-03-01', 1),
        ('2019-03-03', 1);
 
 INSERT INTO carriages (type, number, capacity, flight_id)
-VALUES ('КУПЕ', 1, 36, 1),
-       ('КУПЕ', 3, 36, 1),
-       ('КУПЕ', 7, 36, 1),
-       ('ПЛАЦКАРТ', 4, 58, 1),
-       ('ПЛАЦКАРТ', 5, 58, 2),
-       ('ПЛАЦКАРТ', 8, 58, 2),
-       ('КУПЕ', 1, 2, 2),
-       ('КУПЕ', 2, 2, 2);
+VALUES ('COUPE', 1, 36, 1),
+       ('COUPE', 3, 36, 1),
+       ('COUPE', 7, 36, 1),
+       ('OPEN_SLEEPING', 4, 58, 1),
+       ('OPEN_SLEEPING', 5, 58, 2),
+       ('OPEN_SLEEPING', 8, 58, 2),
+       ('COUPE', 1, 2, 2),
+       ('COUPE', 2, 2, 2);
 
 INSERT INTO bills (order_id, status, price)
 VALUES (1, 'INVOICED', 860),
        (2, 'PAID', 700),
        (3, 'PAID', 700);
 
-INSERT INTO seats (bill_id, number, carriage_id, ticket_id, status)
-VALUES (1, 1, 1, NULL, 'RESERVED'),
-       (2, 1, 6, 1, 'SOLD'),
-       (3, 2, 6, 2, 'SOLD');
+INSERT INTO seats (bill_id, number, carriage_id, status)
+VALUES (1, 1, 1, 'RESERVED'),
+       (2, 1, 6, 'SOLD'),
+       (3, 2, 6, 'SOLD');
 INSERT INTO tariffs (carriage_type, rate)
 VALUES ('OPEN_SLEEPING', 10),
        ('COUPE', 24),

@@ -19,6 +19,7 @@ public class TariffServiceImpl implements TariffService {
     private static final Logger LOGGER = LogManager.getLogger(TariffServiceImpl.class);
 
     private static final Integer MAX_PER_PAGE = 20;
+
     private final TariffRepository tariffRepository;
 
     @Autowired

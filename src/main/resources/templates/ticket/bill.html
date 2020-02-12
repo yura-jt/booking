@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+    <title>Login page</title>
+    <meta charset="utf-8"/>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link type="text/css" href="../static/css/pagination.css"
+          th:href="@{css/pagination.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body id="LoginForm" th:style="'background: url(/static/img/blur.jpg) no-repeat center center fixed;'">
+<div class="container">
+    <h1><span th:text="#{app.title}"></span></h1>
+
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.en}" href="?lang=en">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.ua}" href="?lang=ua">Link</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.ru}" href="?lang=ru">Link</a>
+        </li>
+    </ul>
+
+    <h1 class="form-heading"></h1>
+    <div class="page-content page-container" id="page-content">
+        <div class="padding">
+            <div class="row container d-flex justify-content-center">
+                <div class="col-md-8">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><span th:text="#{bills.title}"></span></h3>
+                        </div> <!-- /.box-header -->
+                        <div class="box-body">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <th style="width: 10px"><span th:text="#{bills.order.id}"></span></th>
+                                    <th><span th:text="#{bills.train.number}"></span></th>
+                                    <th><span th:text="#{bills.departure}"></span></th>
+                                    <th style="width: 40px"><span th:text="#{bills.destination}"></span></th>
+                                </tr>
+                                <tr>
+                                    <td>1.</td>
+                                    <td>Install New Software</td>
+                                    <td> </td>
+                                    <td> </td>
+                                </tr>
+                                <tr>
+                                    <td>2.</td>
+                                    <td>Upload new SQL file</td>
+                                    <td>
+                                        <div class="progress progress-xs">
+                                            <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-yellow">70%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>3.</td>
+                                    <td>Cron job running</td>
+                                    <td>
+                                        <div class="progress progress-xs progress-striped active">
+                                            <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-light-blue">30%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>4.</td>
+                                    <td>Fix and remove bugs</td>
+                                    <td>
+                                        <div class="progress progress-xs progress-striped active">
+                                            <div class="progress-bar progress-bar-success" style="width: 90%"></div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-green">90%</span></td>
+                                </tr>
+                                <tr>
+                                    <td>5.</td>
+                                    <td>Fix and remove bugs</td>
+                                    <td>
+                                        <div class="progress progress-xs progress-striped active">
+                                            <div class="progress-bar progress-bar-success" style="width: 90%"></div>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-green">90%</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div> <!-- /.box-body -->
+                        <div class="box-footer clearfix">
+                            <ul class="pagination pagination-sm no-margin pull-right">
+                                <li><a href="#" data-abc="true">«</a></li>
+                                <li><a href="#" data-abc="true">1</a></li>
+                                <li><a href="#" data-abc="true">2</a></li>
+                                <li><a href="#" data-abc="true">3</a></li>
+                                <li><a href="#" data-abc="true">»</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -19,6 +19,7 @@ public class OrderServiceImpl implements OrderService {
     private static final Logger LOGGER = LogManager.getLogger(OrderServiceImpl.class);
 
     private static final Integer MAX_ORDER_PER_PAGE = 5;
+
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
 

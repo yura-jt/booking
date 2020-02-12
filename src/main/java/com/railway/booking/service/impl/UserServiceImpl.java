@@ -1,7 +1,10 @@
 package com.railway.booking.service.impl;
 
+import com.railway.booking.entity.UserDto;
+import com.railway.booking.mapper.UserMapper;
 import com.railway.booking.model.User;
 import com.railway.booking.repository.UserRepository;
+import com.railway.booking.service.PageUtil;
 import com.railway.booking.service.UserService;
 import com.railway.booking.service.validator.UserValidator;
 import com.railway.booking.service.validator.ValidateException;
@@ -19,28 +22,34 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
+    private static final int USER_PER_PAGE = 5;
+
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserValidator userValidator;
+    private final PageUtil pageUtil;
+    private final UserMapper userMapper;
 
-    private static final int USER_PER_PAGE = 5;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator,
+                           PasswordEncoder passwordEncoder, PageUtil pageUtil, UserMapper userMapper) {
         this.userRepository = userRepository;
         this.userValidator = userValidator;
         this.passwordEncoder = passwordEncoder;
+        this.pageUtil = pageUtil;
+        this.userMapper = userMapper;
     }
 
     @Override
-    public void register(User user) {
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            String message = String.format("User with such e-mail: %s is already exist", user.getEmail());
+    public void register(UserDto userDto) {
+        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
+            String message = String.format("User with such e-mail: %s is already exist", userDto.getEmail());
             LOGGER.warn(message);
         }
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-
+        String encodedPassword = passwordEncoder.encode(userDto.getPassword());
+        userDto.setPassword(encodedPassword);
+        User user = userMapper.mapUserDtoToUser(userDto);
         userRepository.save(user);
     }
 
@@ -66,7 +75,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll(int pageNumber) {
-        int maxPage = getMaxPage();
+        int totalPage = (int) userRepository.count();
+        int maxPage = pageUtil.getMaxPage(USER_PER_PAGE, totalPage);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
@@ -86,15 +96,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
-    }
-
-    private int getMaxPage() {
-        int totalUsers = (int) userRepository.count();
-        int page = totalUsers / USER_PER_PAGE;
-        if (totalUsers % USER_PER_PAGE != 0) {
-            page++;
-        }
-        return page == 0 ? 1 : page;
     }
 
     private boolean isValidCredentials(String email, String password) {

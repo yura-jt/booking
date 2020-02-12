@@ -37,7 +37,7 @@ public class Bill {
 
     @Enumerated(value = EnumType.STRING)
     @NotNull
-    @Column(name = "bill_status", nullable = false)
+    @Column(name = "status", nullable = false)
     private BillStatus billStatus;
 
     @NotNull

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Book List</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+<body>
+<h1>Book List</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th th:text="#{msg.id}" />
+        <th th:text="#{msg.name}" />
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book, iStat : ${bookPage.content}"
+        th:style="${iStat.odd}? 'font-weight: bold;'"
+        th:alt-title="${iStat.even}? 'even' : 'odd'">
+        <td th:text="${book.id}" />
+        <td th:text="${book.name}" />
+    </tr>
+    </tbody>
+</table>
+<div th:if="${bookPage.totalPages > 0}" class="pagination"
+     th:each="pageNumber : ${pageNumbers}">
+    <a th:href="@{/listBooks(size=${bookPage.size}, page=${pageNumber})}"
+       th:text=${pageNumber}
+       th:class="${pageNumber==bookPage.number + 1} ? active"></a>
+</div>
+<div class="page-nation">
+    <ul class="pagination pagination-large">
+        <li class="disabled"><span>«</span></li>
+        <li class="active"><span>1</span></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">6</a></li>
+        <li><a href="#">7</a></li>
+        <li><a href="#">8</a></li>
+        <li><a href="#">9</a></li>
+        <li class="disabled"><span>...</span></li><li>
+        <li><a rel="next" href="#">Next</a></li>
+
+    </ul>
+</div>
+<div>
+    <p>
+        <a th:href="@{/}" th:text="#{msg.id}"></a>
+    </p>
+</div>
+</body>
+</html>

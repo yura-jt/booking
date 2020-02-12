@@ -1,11 +1,13 @@
 package com.railway.booking.service;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.Assert.assertEquals;
 
+@Ignore
 public class PasswordEncryptorTest {
     private PasswordEncoder passwordEncryptor = new BCryptPasswordEncoder();
 
