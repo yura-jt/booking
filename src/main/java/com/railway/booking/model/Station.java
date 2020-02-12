@@ -30,7 +30,7 @@ public class Station {
 
     @Enumerated(value = EnumType.STRING)
     @NotNull
-    @Column(name = "station_type")
+    @Column(name = "type")
     private StationType stationType;
 
     @NotNull

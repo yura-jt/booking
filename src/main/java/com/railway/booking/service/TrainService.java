@@ -1,13 +1,12 @@
 package com.railway.booking.service;
 
 import com.railway.booking.model.Train;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface TrainService {
 
     Train getById(Integer id);
 
-    List<Train> findAll(int pageNumber);
+    Page<Train> findAll(String pageNumber);
 
 }

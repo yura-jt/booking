@@ -2,8 +2,6 @@ package com.railway.booking.entity;
 
 import com.railway.booking.model.RoleType;
 
-import java.util.Objects;
-
 public class UserEntity {
     private final Integer id;
     private final String firstName;

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+    <title>Trains</title>
+    <meta charset="utf-8"/>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link type="text/css" href="../static/css/pagination.css"
+          th:href="@{css/pagination.css}" rel="stylesheet" media="screen"/>
+
+</head>
+<body id="LoginForm" th:style="'background: url(/static/img/blur.jpg) no-repeat center center fixed;'">
+<div class="container">
+    <h1><span th:text="#{app.title}"></span></h1>
+
+    <ul class="nav nav-pills">
+        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
+            <a class="nav-link" th:text="#{switch.en}" th:href="@{${currentUrl}(lang=en)}">Active</a>
+        </li>
+        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
+            <a class="nav-link" th:text="#{switch.ru}" th:href="@{${currentUrl}(lang=ru)}">Active</a>
+        </li>
+        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
+            <a class="nav-link" th:text="#{switch.ua}" th:href="@{${currentUrl}(lang=ua)}">Active</a>
+        </li>
+    </ul>
+    <div class="container">
+
+        <div class="alert alert-info">
+            <a href="profile" class="btn btn-xs btn-primary pull-right"><span th:text="#{profile.button}"></span></a>
+            <strong><span th:text="#{proceed.profile}"></span></strong>
+        </div>
+
+    </div>
+    <h1 class="form-heading"></h1>
+    <div class="page-content page-container" id="page-content">
+        <div class="padding">
+            <div class="row container d-flex justify-content-center">
+                <div class="col-md-8">
+                    <div class="box">
+                        <div class="box-header with-border">
+                            <h3 class="box-title"><span th:text="#{trains.title}"></span></h3>
+                        </div> <!-- /.box-header -->
+                        <div class="box-body">
+                            <table class="table table-bordered">
+                                <tbody>
+                                <tr>
+                                    <th style="width: 10px ; background-color:yellow"><span th:text="#{trains.id}"></span></th>
+                                    <th style = "background-color:yellow"><span th:text="#{train.code}"></span></th>
+                                    <th style = "background-color:yellow"><span th:text="#{train.name}"></span></th>
+                                </tr>
+                                <tr th:each="train : ${trains}">
+                                    <td th:text="${train.id}"></td>
+                                    <td th:text="${train.code}"></td>
+                                    <td th:text="${train.name}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div> <!-- /.box-body -->
+                        <div th:if="${trains.totalPages != 1}" class="box-footer clearfix">
+                            <ul class="pagination pagination-sm no-margin pull-right">
+                                <li th:class="${trains.number == 0} ? disabled">
+                                    <a class="pageLink" href="/trains?page=1">&laquo;</a>
+<!--                                    <a class="pageLink" th:href="@{/trains(lang=${lang},page=1)}"></a>-->
+                                </li>
+                                <li th:class="${trains.number == 0} ? disabled">
+                                    <a class="pageLink" th:href="@{/trains(page=${trains.number})}">&larr;</a>
+                                </li>
+                                <li th:class="${trains.number == (page - 1)} ? 'active pointer-disabled'"
+                                    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                                    <a class="pageLink" th:href="@{/trains(page=${page})}"
+                                       th:text="${page}"></a>
+                                </li>
+                                <li th:class="${trains.number + 1 == trains.totalPages} ? disabled">
+                                    <a class="pageLink"
+                                       th:href="@{/trains(page=${trains.number + 2})}">&rarr;</a>
+                                </li>
+                                <li th:class="${trains.number + 1 == trains.totalPages} ? disabled">
+                                    <a class="pageLink"
+                                       th:href="@{/trains(page=${trains.totalPages})}">&raquo;</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+</body>
+</html>

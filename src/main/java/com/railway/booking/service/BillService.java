@@ -1,8 +1,7 @@
 package com.railway.booking.service;
 
 import com.railway.booking.model.Bill;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface BillService {
 
@@ -10,7 +9,7 @@ public interface BillService {
 
     Bill getById(Integer id);
 
-    List<Bill> findAll(int pageNumber);
+    Page<Bill> findAll(String pageNumber);
 
     void update(Bill bill);
 }

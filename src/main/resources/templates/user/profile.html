@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <head>
-    <title>Login page</title>
+    <title>User profile</title>
     <meta charset="utf-8"/>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -17,7 +17,7 @@
         <div id="admin-sidebar" class="col-md-2 p-x-0 p-y-3">
             <ul class="sidenav admin-sidenav list-unstyled">
                 <li><a href="#"><span th:text="#{profile.make.order}"></span></a></li>
-                <li><a href="#"><span th:text="#{profile.tran.schedule}"></span></a></li>
+                <li><a href="trains"><span th:text="#{profile.tran.schedule}"></span></a></li>
                 <li><a href="#"><span th:text="#{profile.my.tickets}"></span></a></li>
                 <li><a href="#"><span th:text="#{profile.my.bills}"></span></a></li>
                 <li><a href="login"><span th:text="#{profile.log.out}"></span></a></li>

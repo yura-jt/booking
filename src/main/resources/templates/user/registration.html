@@ -1,79 +1,139 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+<!--<html th:lang="${param.lang}" xmlns="http://www.w3.org/1999/xhtml"-->
+<!--      xmlns:th="http://www.thymeleaf.org">-->
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <head>
-    <title>Registration Form</title>
-    <link rel="stylesheet" type="text/css" th:href="@{/css/registration.css}"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>railway-ticket-booking/registration</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link th:href="@{/static/css/registration.css}" href="/static/css/registration.css" rel="stylesheet" type="text/css"/>
+
 </head>
 <body>
-<form th:action="@{/}" method="get">
-    <button class="btn btn-md btn-warning btn-block" type="Submit">Go To Login Page</button>
-</form>
-
 <div class="container">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <form autocomplete="off" action="#" th:action="@{/registration}"
-                  th:object="${user}" method="post" class="form-horizontal"
-                  role="form">
-                <h2>Registration Form</h2>
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
-                               class="validation-message"></label>
-                        <input type="text" th:field="*{name}" placeholder="Name"
-                               class="form-control"/>
-                    </div>
+    <h5>
+        <a href="login" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;-webkit-text-size-adjust:none;mso-hide:all;"> &larr; <span th:text="#{proceed.login}"></span></a>
+    </h5>
+    <ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.en}" href="?lang=en">Active</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.ua}" href="?lang=ua">Link</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:text="#{switch.ru}" href="?lang=ru">Link</a>
+        </li>
+    </ul>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <span th:text="#{register.title}"></span>
                 </div>
+                <div class="card-body">
 
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <label th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
-                               class="validation-message"></label>
-                        <input type="text" th:field="*{lastName}"
-                               placeholder="Last Name" class="form-control"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <input type="text" th:field="*{email}" placeholder="Email"
-                               class="form-control"/> <label
-                            th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
-                            class="validation-message"></label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <input type="text" th:field="*{userName}" placeholder="User Name"
-                               class="form-control"/> <label
-                            th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"
-                            class="validation-message"></label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <input type="password" th:field="*{password}"
-                               placeholder="Password" class="form-control"/> <label
-                            th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-                            class="validation-message"></label>
-                    </div>
-                </div>
+                    <form class="form-horizontal" method="post" action="registration">
 
-                <div class="form-group">
-                    <div class="col-sm-9">
-                        <button type="submit" class="btn btn-primary btn-block">Register User</button>
-                    </div>
+                        <div class="form-group">
+                            <label for="first_name" class="cols-sm-2 control-label">
+                                <span th:text="#{first.name.field}"></span>
+                            </label>
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user fa"
+                                                                       aria-hidden="true"></i></span>
+                                    <input type="text" class="form-control" name="first_name" id="first_name"
+                                           th:placeholder="#{enter.first.name}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="cols-sm-2 control-label">
+                                <span th:text="#{last.name.field}"></span>
+                            </label>
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user fa"
+                                                                       aria-hidden="true"></i></span>
+                                    <input type="text" class="form-control" name="last_name" id="lastname"
+                                           th:placeholder="#{enter.last.name}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="cols-sm-2 control-label">
+                                <span th:text="#{email.field}"></span>
+                            </label>
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
+                                    <input type="text" class="form-control" name="email" id="email"
+                                           th:placeholder="#{enter.email}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phonenumber" class="cols-sm-2 control-label">
+                                <span th:text="#{phone.number.field}"></span>
+                            </label>
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-users fa"
+                                                                       aria-hidden="true"></i></span>
+                                    <input type="text" class="form-control" name="phone_number" id="phonenumber"
+                                           th:placeholder="#{enter.phone.number}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="cols-sm-2 control-label">
+                                <span th:text="#{password.field}"></span>
+                            </label>
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                                    <input type="password" class="form-control" name="password" id="password"
+                                           th:placeholder="#{enter.password}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password_repeated" class="cols-sm-2 control-label">
+                                <span th:text="#{confirm.password.field}"></span>
+                            </label>
+                            <div class="cols-sm-10">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
+                                    <input type="password" class="form-control" name="password_repeated"
+                                           id="password_repeated" th:placeholder="#{enter.confirm.password}" />
+                                </div>
+                            </div>
+                        </div>
+                        <label class="cols-sm-2 control-label">
+                            <span th:text="#{mandatory.field}"></span>
+                        </label>
+                        <div class="form-group ">
+                            <button type="submit" name="registrationButton"
+                                    class="btn btn-primary btn-lg btn-block login-button">
+                                <span th:text="#{register.button}"></span>
+                            </button>
+<!--                            <%-- <input type="submit" value="Submit"/>--%>-->
+<!--                            <%---->
+<!--                            <div align="center"><a href="registration">-->
+<!--                                <span th:text="#{register.button}"></span>-->
+<!--                            </a></div>-->
+<!--                            --%>-->
+                        </div>
+                    </form>
                 </div>
-
-                <h2><span class="text-success" th:utext="${successMessage}"></span></h2>
-
-            </form>
+            </div>
         </div>
     </div>
 </div>
-
+<script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>
