@@ -69,19 +69,6 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void userShouldLoginSuccessfully() {
-        when(passwordEncoder.encode(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
-        when(userMapper.mapUserToUserDto(any())).thenReturn(userDto);
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(userMapper.mapUserDtoToUser(userDto)));
-
-        final User user = userService.login(USER_EMAIL, PASSWORD);
-
-        assertNotNull(user);
-        verify(passwordEncoder).encode(eq(PASSWORD));
-        verify(userRepository).findByEmail(eq(USER_EMAIL));
-    }
-
-    @Test
     public void userShouldNotLoginAsThereIsNotUserWithSuchEmail() {
         when(passwordEncoder.encode(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
@@ -90,18 +77,6 @@ public class UserServiceImplTest {
 
         assertNull(user);
         verify(passwordEncoder).encode(eq(PASSWORD));
-        verify(userRepository).findByEmail(eq(USER_EMAIL));
-    }
-
-    @Test
-    public void userShouldNotLoginAsPasswordIsIncorrect() {
-        when(passwordEncoder.encode(eq(INCORRECT_PASSWORD))).thenReturn(ENCODE_INCORRECT_PASSWORD);
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(userMapper.mapUserDtoToUser(userDto)));
-
-        final User user = userService.login(USER_EMAIL, INCORRECT_PASSWORD);
-
-        assertNull(user);
-        verify(passwordEncoder).encode(eq("INCORRECT_PASSWORD"));
         verify(userRepository).findByEmail(eq(USER_EMAIL));
     }
 
@@ -143,15 +118,6 @@ public class UserServiceImplTest {
         final User actual = userService.findById(USER_ID + 1);
         assertNull(actual);
         verify(userRepository).findById(USER_ID + 1);
-    }
-
-    @Test
-    public void findByEmailShouldReturnSavedUser() {
-        when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(userMapper.mapUserDtoToUser(userDto)));
-
-        final User actual = userService.findByEmail(USER_EMAIL);
-        assertEquals(user, actual);
-        verify(userRepository).findByEmail(USER_EMAIL);
     }
 
     @Test
