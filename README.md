@@ -3,4 +3,4 @@
 
 Online service for booking railway tickets
 
-Spring Boot, Thymeleaf
+Spring Boot,  Thymeleaf
