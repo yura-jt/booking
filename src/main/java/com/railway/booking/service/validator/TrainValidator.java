@@ -1,16 +1,14 @@
 package com.railway.booking.service.validator;
 
-import com.railway.booking.model.Train;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.railway.booking.entity.Train;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
+@Log4j2
 @Component
 public class TrainValidator implements Validator<Train> {
-    private static final Logger LOGGER = LogManager.getLogger(TrainValidator.class);
-
     private static final Integer MAX_CODE_LENGTH = 10;
     private static final Integer MAX_NAME_LENGTH = 100;
 
@@ -22,7 +20,7 @@ public class TrainValidator implements Validator<Train> {
             validateStringLength(entity.getName(), MAX_NAME_LENGTH);
             isValid = true;
         } catch (ValidateException e) {
-            LOGGER.warn("Train entity validation exception occurred");
+            log.warn("Train entity validation exception occurred");
         }
         return isValid;
     }
@@ -32,7 +30,7 @@ public class TrainValidator implements Validator<Train> {
         if (id == null || id < 0) {
             String message = String.format("Provided user id for query: %d is not valid," +
                     "id couldn't be null or negative", id);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }
@@ -40,7 +38,7 @@ public class TrainValidator implements Validator<Train> {
     public void validateDate(LocalDate localDate) {
         if (localDate == null || localDate.isBefore(LocalDate.now())) {
             String message = String.format("Local date: %s for train search is expired", localDate.toString());
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }
@@ -49,7 +47,7 @@ public class TrainValidator implements Validator<Train> {
         if (field == null || field.length() >= upperBound) {
             String message = String.format("Train %s length is out of bound. " +
                     "Maximum allowed length is: %s", field, upperBound);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }

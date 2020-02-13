@@ -1,31 +1,34 @@
 package com.railway.booking.controller;
 
+import com.railway.booking.entity.Order;
 import com.railway.booking.entity.Pager;
-import com.railway.booking.entity.Train;
-import com.railway.booking.service.TrainService;
+import com.railway.booking.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class TrainController {
+public class OrderController {
     private static final int PAGE_SIZES = 5;
 
     @Autowired
-    private TrainService trainService;
+    private OrderService orderService;
 
-    @GetMapping(value = "/trains")
-    public ModelAndView listTrains(@RequestParam(name = "page", required = false) String page) {
-        ModelAndView modelAndView = new ModelAndView("/train/trains");
+    @GetMapping(value = "/orders")
+    public ModelAndView bills(
+            Model model,
+            @RequestParam(name = "page", required = false) String page) {
+        ModelAndView modelAndView = new ModelAndView("ticket/orders");
 
-        Page<Train> trains = trainService.findAll(page);
+        Page<Order> orders = orderService.findAll(page);
 
-        Pager pager = new Pager(trains.getTotalPages(), trains.getNumber());
+        Pager pager = new Pager(orders.getTotalPages(), orders.getNumber());
 
-        modelAndView.addObject("trains", trains);
+        modelAndView.addObject("orders", orders);
         modelAndView.addObject("selectedPageSize", PAGE_SIZES);
         modelAndView.addObject("pageSizes", PAGE_SIZES);
         modelAndView.addObject("pager", pager);

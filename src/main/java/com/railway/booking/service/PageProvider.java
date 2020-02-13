@@ -1,19 +1,17 @@
 package com.railway.booking.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
+@Log4j2
 @Component
-public class PageUtil {
-    private static final Logger LOGGER = LogManager.getLogger(PageUtil.class);
-
+public class PageProvider {
     public int getPageNumberFromString(String page) {
         int result = 1;
         try {
             result = Integer.parseInt(page);
         } catch (NumberFormatException e) {
-            LOGGER.warn(String.format("Can not parse page number from string: %s", page), e);
+            log.warn(String.format("Can not parse page number from string: %s", page), e);
         }
         return result;
     }

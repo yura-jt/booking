@@ -1,10 +1,9 @@
 package com.railway.booking.controller;
 
-import com.railway.booking.entity.UserDto;
-import com.railway.booking.model.User;
+import com.railway.booking.entity.User;
+import com.railway.booking.model.UserDto;
 import com.railway.booking.service.UserService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,17 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+@Log4j2
 @Controller
 public class UserController {
-    private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
-
-//    @GetMapping(value = {"/", "/login"})
-//    public String login() {
-//        return "user/login";
-//    }
 
     @GetMapping(value = {"/", "/login"})
     public ModelAndView login() {
@@ -70,7 +64,7 @@ public class UserController {
                 userService.register(userDto);
                 return "profile";
             } catch (Exception e) {
-                LOGGER.warn(String.format("Can not register user with provided credentials for user with e-mail: %s",
+                log.warn(String.format("Can not register user with provided credentials for user with e-mail: %s",
                         userDto.getEmail()), e);
             }
         }

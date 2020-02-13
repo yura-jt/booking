@@ -1,10 +1,8 @@
 package com.railway.booking.service;
 
-import com.railway.booking.model.CarriageType;
-import com.railway.booking.model.Tariff;
-import org.springframework.stereotype.Service;
+import com.railway.booking.entity.CarriageType;
+import com.railway.booking.entity.Tariff;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 

@@ -1,16 +1,14 @@
 package com.railway.booking.service.validator;
 
-import com.railway.booking.model.User;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.railway.booking.entity.User;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
+@Log4j2
 @Component
 public class UserValidator implements Validator<User> {
-    private static final Logger LOGGER = LogManager.getLogger(UserValidator.class);
-
     private static final String EMAIL_REGEX = "^[a-zA-Z0-9_!#$%&*+/=?`{}~^.-]+@[a-zA-Z0-9.-]+$";
     private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$";
 
@@ -22,7 +20,7 @@ public class UserValidator implements Validator<User> {
             validatePassword(user.getPassword());
             isValid = true;
         } catch (ValidateException e) {
-            LOGGER.warn("User entity validation exception occurred");
+            log.warn("User entity validation exception occurred");
         }
         return isValid;
     }
@@ -32,7 +30,7 @@ public class UserValidator implements Validator<User> {
         if (id == null || id < 0) {
             String message = String.format("FindByEmail service failed, " +
                     "provided user id: %d couldn't be null or negative", id);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }
@@ -40,7 +38,7 @@ public class UserValidator implements Validator<User> {
     private void validateEmail(String email) {
         if (!checkValidInput(email, EMAIL_REGEX)) {
             String message = String.format("E-Mail: %s is not match to requirements", email);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }
@@ -48,7 +46,7 @@ public class UserValidator implements Validator<User> {
     private void validatePassword(String password) {
         if (!checkValidInput(password, PASSWORD_REGEX)) {
             String message = String.format("Password: %s is not match to requirements", password);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException("Password is not match to requirements");
         }
     }

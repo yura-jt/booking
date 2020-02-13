@@ -1,17 +1,16 @@
 package com.railway.booking.service;
 
-import com.railway.booking.entity.UserDto;
-import com.railway.booking.model.User;
-
-import java.util.List;
+import com.railway.booking.entity.User;
+import com.railway.booking.model.UserDto;
+import org.springframework.data.domain.Page;
 
 public interface UserService {
 
     User login(String email, String password);
 
-    void register(UserDto userDto);
+    boolean register(UserDto userDto);
 
-    List<User> findAll(int pageNumber);
+    Page<User> findAll(String pageNumber);
 
     User findById(Integer id);
 

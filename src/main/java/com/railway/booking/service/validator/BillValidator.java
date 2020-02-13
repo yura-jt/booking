@@ -1,15 +1,14 @@
 package com.railway.booking.service.validator;
 
-import com.railway.booking.model.Bill;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.railway.booking.entity.Bill;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Log4j2
 @Component
 public class BillValidator implements Validator<Bill> {
-    private static final Logger LOGGER = LogManager.getLogger(OrderValidator.class);
 
     @Override
     public boolean isValid(Bill entity) {
@@ -18,7 +17,7 @@ public class BillValidator implements Validator<Bill> {
             validateId(entity.getOrder().getId());
             isValid = true;
         } catch (ValidateException e) {
-            LOGGER.warn("Bill entity validation exception occurred");
+            log.warn("Bill entity validation exception occurred");
         }
         return isValid;
     }
@@ -27,7 +26,7 @@ public class BillValidator implements Validator<Bill> {
         if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
             String message = ("Provided price: is not correct," +
                     "price couldn't be null or negative");
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }
@@ -37,7 +36,7 @@ public class BillValidator implements Validator<Bill> {
         if (id == null || id < 0) {
             String message = String.format("Provided Bill id for query: %d is not valid," +
                     "id couldn't be null or negative", id);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }

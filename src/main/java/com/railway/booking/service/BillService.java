@@ -1,6 +1,6 @@
 package com.railway.booking.service;
 
-import com.railway.booking.model.Bill;
+import com.railway.booking.entity.Bill;
 import org.springframework.data.domain.Page;
 
 public interface BillService {

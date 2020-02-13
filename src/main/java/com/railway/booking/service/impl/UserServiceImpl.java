@@ -1,89 +1,64 @@
 package com.railway.booking.service.impl;
 
-import com.railway.booking.entity.UserDto;
+import com.railway.booking.entity.User;
 import com.railway.booking.mapper.UserMapper;
-import com.railway.booking.model.User;
+import com.railway.booking.model.UserDto;
 import com.railway.booking.repository.UserRepository;
-import com.railway.booking.service.PageUtil;
+import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.UserService;
 import com.railway.booking.service.validator.UserValidator;
 import com.railway.booking.service.validator.ValidateException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
+@Log4j2
 @Service
+@AllArgsConstructor
 @Transactional
 public class UserServiceImpl implements UserService {
-    private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
-
     private static final int USER_PER_PAGE = 5;
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserValidator userValidator;
-    private final PageUtil pageUtil;
+    private final PageProvider pageProvider;
     private final UserMapper userMapper;
 
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserValidator userValidator,
-                           PasswordEncoder passwordEncoder, PageUtil pageUtil, UserMapper userMapper) {
-        this.userRepository = userRepository;
-        this.userValidator = userValidator;
-        this.passwordEncoder = passwordEncoder;
-        this.pageUtil = pageUtil;
-        this.userMapper = userMapper;
-    }
-
     @Override
-    public void register(UserDto userDto) {
+    public boolean register(UserDto userDto) {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             String message = String.format("User with such e-mail: %s is already exist", userDto.getEmail());
-            LOGGER.warn(message);
+            log.warn(message);
+            return false;
         }
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         userDto.setPassword(encodedPassword);
         User user = userMapper.mapUserDtoToUser(userDto);
         userRepository.save(user);
+        return true;
     }
 
     @Override
     @Transactional(readOnly = true)
     public User login(String email, String password) {
-        User user = null;
-        if (!isValidCredentials(email, password)) {
-            return user;
-        }
-
-        String encryptPassword = passwordEncoder.encode(password);
-        user = userRepository.findByEmail(email).orElse(null);
-
-        if (user == null || !user.getPassword().equals(encryptPassword)) {
-            String message = String.format("User with email: %s is not registered or password is not correct", email);
-            LOGGER.warn(message);
-            user = null;
-        }
-        return user;
+        return validateUser(email, password);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> findAll(int pageNumber) {
-        int totalPage = (int) userRepository.count();
-        int maxPage = pageUtil.getMaxPage(USER_PER_PAGE, totalPage);
-        if (pageNumber <= 0) {
-            pageNumber = 1;
-        } else if (pageNumber >= maxPage) {
-            pageNumber = maxPage;
-        }
+    public Page<User> findAll(String page) {
+        int currentPage = pageProvider.getPageNumberFromString(page);
 
-        return userRepository.findAll();
+        int evalPage = (currentPage < 1) ? 1 : (currentPage - 1);
+        evalPage = evalPage > pageProvider.getMaxPage(USER_PER_PAGE, (int) userRepository.count()) ? 0 : evalPage;
+
+        return userRepository.findAll(PageRequest.of(evalPage, USER_PER_PAGE));
     }
 
     @Override
@@ -108,8 +83,28 @@ public class UserServiceImpl implements UserService {
             isValid = true;
         } catch (ValidateException e) {
             String message = String.format("Credentials, provided for email: %s are not valid ", email);
-            LOGGER.warn(message);
+            log.warn(message);
         }
         return isValid;
+    }
+
+    private User validateUser(String email, String password) {
+        if (!isValidCredentials(email, password)) {
+            String message = String.format("User with such e-mail: %s is already exist", email);
+            log.warn(message);
+            return null;
+        }
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        String encryptPassword = passwordEncoder.encode(password);
+        return isPasswordValid(user, encryptPassword) ? user : null;
+    }
+
+    private boolean isPasswordValid(User user, String encryptPassword) {
+        if (user == null || !user.getPassword().equals(encryptPassword)) {
+            log.warn("Provided password is not matched");
+            return false;
+        }
+        return true;
     }
 }

@@ -50,6 +50,7 @@
                 <button type="submit" class="btn btn-primary"><span th:text="#{login.button}"></span></button>
 
             </form>
+            <p th:if="${loginError}" class="error">Wrong user or password</p>
         </div>
     </div>
 </div>

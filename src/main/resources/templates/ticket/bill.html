@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <head>
-    <title>Login page</title>
+    <title>Bills</title>
     <meta charset="utf-8"/>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -16,17 +16,24 @@
     <h1><span th:text="#{app.title}"></span></h1>
 
     <ul class="nav nav-pills">
-        <li class="nav-item">
-            <a class="nav-link" th:text="#{switch.en}" href="?lang=en">Active</a>
+        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
+            <a class="nav-link" th:text="#{switch.en}" th:href="@{${currentUrl}(lang=en)}">Active</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" th:text="#{switch.ua}" href="?lang=ua">Link</a>
+        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
+            <a class="nav-link" th:text="#{switch.ru}" th:href="@{${currentUrl}(lang=ru)}">Active</a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link" th:text="#{switch.ru}" href="?lang=ru">Link</a>
+        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
+            <a class="nav-link" th:text="#{switch.ua}" th:href="@{${currentUrl}(lang=ua)}">Active</a>
         </li>
     </ul>
+    <div class="container">
 
+        <div class="alert alert-info">
+            <a href="profile" class="btn btn-xs btn-primary pull-right"><span th:text="#{profile.button}"></span></a>
+            <strong><span th:text="#{proceed.profile}"></span></strong>
+        </div>
+
+    </div>
     <h1 class="form-heading"></h1>
     <div class="page-content page-container" id="page-content">
         <div class="padding">
@@ -34,73 +41,48 @@
                 <div class="col-md-8">
                     <div class="box">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><span th:text="#{bills.title}"></span></h3>
+                            <h3 class="box-title">My Bills</h3>
                         </div> <!-- /.box-header -->
                         <div class="box-body">
                             <table class="table table-bordered">
                                 <tbody>
                                 <tr>
-                                    <th style="width: 10px"><span th:text="#{bills.order.id}"></span></th>
-                                    <th><span th:text="#{bills.train.number}"></span></th>
-                                    <th><span th:text="#{bills.departure}"></span></th>
-                                    <th style="width: 40px"><span th:text="#{bills.destination}"></span></th>
+                                    <th>Order Id</th>
+                                    <th>Status</th>
+                                    <th>Price</th>
+                                    <th>Created on</th>
                                 </tr>
-                                <tr>
-                                    <td>1.</td>
-                                    <td>Install New Software</td>
-                                    <td> </td>
-                                    <td> </td>
-                                </tr>
-                                <tr>
-                                    <td>2.</td>
-                                    <td>Upload new SQL file</td>
-                                    <td>
-                                        <div class="progress progress-xs">
-                                            <div class="progress-bar progress-bar-yellow" style="width: 70%"></div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge bg-yellow">70%</span></td>
-                                </tr>
-                                <tr>
-                                    <td>3.</td>
-                                    <td>Cron job running</td>
-                                    <td>
-                                        <div class="progress progress-xs progress-striped active">
-                                            <div class="progress-bar progress-bar-primary" style="width: 30%"></div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge bg-light-blue">30%</span></td>
-                                </tr>
-                                <tr>
-                                    <td>4.</td>
-                                    <td>Fix and remove bugs</td>
-                                    <td>
-                                        <div class="progress progress-xs progress-striped active">
-                                            <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge bg-green">90%</span></td>
-                                </tr>
-                                <tr>
-                                    <td>5.</td>
-                                    <td>Fix and remove bugs</td>
-                                    <td>
-                                        <div class="progress progress-xs progress-striped active">
-                                            <div class="progress-bar progress-bar-success" style="width: 90%"></div>
-                                        </div>
-                                    </td>
-                                    <td><span class="badge bg-green">90%</span></td>
+                                <tr th:each="bill : ${bills}">
+                                    <td th:text="${bill.getOrderId()}"></td>
+                                    <td th:text="${bill.getStatus()}"></td>
+                                    <td th:text="${bill.getPrice()}"></td>
+                                    <td th:text="${bill.getCreatedOn()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div> <!-- /.box-body -->
-                        <div class="box-footer clearfix">
+                        <div th:if="${bills.totalPages != 1}" class="box-footer clearfix">
                             <ul class="pagination pagination-sm no-margin pull-right">
-                                <li><a href="#" data-abc="true">«</a></li>
-                                <li><a href="#" data-abc="true">1</a></li>
-                                <li><a href="#" data-abc="true">2</a></li>
-                                <li><a href="#" data-abc="true">3</a></li>
-                                <li><a href="#" data-abc="true">»</a></li>
+                                <li th:class="${bills.number == 0} ? disabled">
+                                    <a class="pageLink" href="/bill?page=1">&laquo;</a>
+                                    <!--                                    <a class="pageLink" th:href="@{/bills(lang=${lang},page=1)}"></a>-->
+                                </li>
+                                <li th:class="${bills.number == 0} ? disabled">
+                                    <a class="pageLink" th:href="@{/bill(page=${bills.number})}">&larr;</a>
+                                </li>
+                                <li th:class="${bills.number == (page - 1)} ? 'active pointer-disabled'"
+                                    th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+                                    <a class="pageLink" th:href="@{/bill(page=${page})}"
+                                       th:text="${page}"></a>
+                                </li>
+                                <li th:class="${bills.number + 1 == bills.totalPages} ? disabled">
+                                    <a class="pageLink"
+                                       th:href="@{/bill(page=${bills.number + 2})}">&rarr;</a>
+                                </li>
+                                <li th:class="${bills.number + 1 == bills.totalPages} ? disabled">
+                                    <a class="pageLink"
+                                       th:href="@{/bill(page=${bills.totalPages})}">&raquo;</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -109,5 +91,8 @@
         </div>
     </div>
 </div>
+<script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/app.js}"></script>
 </body>
 </html>

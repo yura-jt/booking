@@ -1,7 +1,6 @@
-package com.railway.booking.model;
+package com.railway.booking.entity;
 
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -47,7 +46,6 @@ public class User {
 
     @NotNull
     @Column(name = "password", nullable = false)
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,20}$")
     private String password;
 
     @Enumerated(value = EnumType.STRING)

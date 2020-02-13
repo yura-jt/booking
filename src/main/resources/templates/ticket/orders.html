@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
 <head>
-    <title>Tickets</title>
+    <title>Orders</title>
     <meta charset="utf-8"/>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -41,7 +41,7 @@
                 <div class="col-md-8">
                     <div class="box">
                         <div class="box-header with-border">
-                            <h3 class="box-title">My Tickets</h3>
+                            <h3 class="box-title">My Orders</h3>
                         </div> <!-- /.box-header -->
                         <div class="box-body">
                             <table class="table table-bordered">
@@ -49,43 +49,41 @@
                                 <tr>
                                     <th>Id</th>
                                     <th>Departure station</th>
-                                    <th>Destination station</th>
-                                    <th>Passenger name</th>
-                                    <th>Price</th>
-                                    <th>Created On</th>
+                                    <th>Arriving station</th>
+                                    <th>Departure date</th>
+                                    <th>Status</th>
                                 </tr>
-                                <tr th:each="tickets : ${ticket}">
-                                    <td th:text="${ticket.getId()}"></td>
-                                    <td th:text="${ticket.getDepartureStation()}"></td>
-                                    <td th:text="${ticket.getDestinationStation()}"></td>
-                                    <td th:text="${ticket.getPassengerName()}"></td>
-                                    <td th:text="${ticket.getPrice()}"></td>
-                                    <td th:text="${ticket.getCreatedOn()}"></td>
+                                <tr th:each="order : ${orders}">
+                                    <td th:text="${order.getId()}"></td>
+                                    <td th:text="${order.getDepartureStation()}"></td>
+                                    <td th:text="${order.getDestinationStation()}"></td>
+                                    <td th:text="${order.getDepartureDate()}"></td>
+                                    <td th:text="${order.getStatus()}"></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div> <!-- /.box-body -->
-                        <div th:if="${tickets.totalPages != 1}" class="box-footer clearfix">
+                        <div th:if="${orders.totalPages != 1}" class="box-footer clearfix">
                             <ul class="pagination pagination-sm no-margin pull-right">
-                                <li th:class="${tickets.number == 0} ? disabled">
-                                    <a class="pageLink" href="/tickets?page=1">&laquo;</a>
-                                    <!--                                    <a class="pageLink" th:href="@{/trains(lang=${lang},page=1)}"></a>-->
+                                <li th:class="${orders.number == 0} ? disabled">
+                                    <a class="pageLink" href="/orders?page=1">&laquo;</a>
+                                    <!--                                    <a class="pageLink" th:href="@{/orders(lang=${lang},page=1)}"></a>-->
                                 </li>
-                                <li th:class="${tickets.number == 0} ? disabled">
-                                    <a class="pageLink" th:href="@{/tickets(page=${tickets.number})}">&larr;</a>
+                                <li th:class="${orders.number == 0} ? disabled">
+                                    <a class="pageLink" th:href="@{/orders(page=${orders.number})}">&larr;</a>
                                 </li>
-                                <li th:class="${tickets.number == (page - 1)} ? 'active pointer-disabled'"
+                                <li th:class="${orders.number == (page - 1)} ? 'active pointer-disabled'"
                                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                                    <a class="pageLink" th:href="@{/tickets(page=${page})}"
+                                    <a class="pageLink" th:href="@{/orders(page=${page})}"
                                        th:text="${page}"></a>
                                 </li>
-                                <li th:class="${tickets.number + 1 == tickets.totalPages} ? disabled">
+                                <li th:class="${orders.number + 1 == orders.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/tickets(page=${tickets.number + 2})}">&rarr;</a>
+                                       th:href="@{/orders(page=${orders.number + 2})}">&rarr;</a>
                                 </li>
-                                <li th:class="${tickets.number + 1 == tickets.totalPages} ? disabled">
+                                <li th:class="${orders.number + 1 == orders.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/tickets(page=${tickets.totalPages})}">&raquo;</a>
+                                       th:href="@{/orders(page=${orders.totalPages})}">&raquo;</a>
                                 </li>
                             </ul>
                         </div>

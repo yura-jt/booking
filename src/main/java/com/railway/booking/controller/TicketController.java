@@ -1,15 +1,12 @@
 package com.railway.booking.controller;
 
-import com.railway.booking.model.Bill;
-import com.railway.booking.model.Pager;
-import com.railway.booking.service.BillService;
+import com.railway.booking.entity.Pager;
+import com.railway.booking.entity.Ticket;
+import com.railway.booking.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,24 +15,17 @@ public class TicketController {
     private static final int PAGE_SIZES = 5;
 
     @Autowired
-    private BillService billService;
+    private TicketService ticketService;
 
-    @GetMapping(value = {"/tickets"})
-    public String tickets() {
-        return "ticket/tickets";
-    }
+    @GetMapping(value = "/tickets")
+    public ModelAndView bills(@RequestParam(name = "page", required = false) String page) {
+        ModelAndView modelAndView = new ModelAndView("ticket/tickets");
 
-    @RequestMapping(value = "/bills", method = RequestMethod.GET)
-    public ModelAndView bills(
-            Model model,
-            @RequestParam(name = "page", required = false) String page) {
-        ModelAndView modelAndView = new ModelAndView("bills");
+        Page<Ticket> tickets = ticketService.findAll(page);
 
-        Page<Bill> bills = billService.findAll(page);
+        Pager pager = new Pager(tickets.getTotalPages(), tickets.getNumber());
 
-        Pager pager = new Pager(bills.getTotalPages(), bills.getNumber());
-
-        modelAndView.addObject("bills", bills);
+        modelAndView.addObject("tickets", tickets);
         modelAndView.addObject("selectedPageSize", PAGE_SIZES);
         modelAndView.addObject("pageSizes", PAGE_SIZES);
         modelAndView.addObject("pager", pager);
