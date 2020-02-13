@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
             log.warn(message);
             return false;
         }
+
         String encodedPassword = passwordEncoder.encode(userDto.getPassword());
         userDto.setPassword(encodedPassword);
         User user = userMapper.mapUserDtoToUser(userDto);

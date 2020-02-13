@@ -26,6 +26,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -42,6 +43,7 @@ public class UserServiceImplTest {
     private static final String ENCODE_INCORRECT_PASSWORD = "encode_incorrect_password";
 
     private UserDto userDto = getUserDto();
+    private User user = getUser();
 
     @Mock
     private UserRepository userRepository;
@@ -105,41 +107,31 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldRegisterSuccessfully() {
-        when(userValidator.isValid(any(User.class))).thenReturn(true);
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(any())).thenReturn(ENCODED_PASSWORD);
+        when(userMapper.mapUserDtoToUser(any())).thenReturn(user);
 
         userService.register(userDto);
 
-        verify(userValidator).isValid(any(User.class));
         verify(userRepository).findByEmail(anyString());
         verify(userRepository).save(any(User.class));
     }
 
     @Test
-    public void userShouldNotRegisterWithInvalidPasswordOrEmail() {
-        when(userValidator.isValid(any(User.class))).thenReturn(false);
-
-        userService.register(userDto);
-        verify(userValidator).isValid(any(User.class));
-    }
-
-    @Test
     public void userShouldNotRegisterAsEmailIsAlreadyUsed() {
-        when(userValidator.isValid(any(User.class))).thenReturn(false);
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(userMapper.mapUserDtoToUser(userDto)));
-        when(userRepository.save(any(User.class)));
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
         userService.register(userDto);
-        verify(userValidator).isValid(any(User.class));
+        verifyZeroInteractions(passwordEncoder);
     }
 
     @Test
     public void findByIdShouldReturnSavedUser() {
         userService.register(userDto);
-        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(userMapper.mapUserDtoToUser(userDto)));
+        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
 
         final User actual = userService.findById(USER_ID);
-        assertEquals(userDto, actual);
+        assertEquals(user, actual);
         verify(userRepository).findById(USER_ID);
     }
 
@@ -158,7 +150,7 @@ public class UserServiceImplTest {
         when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(userMapper.mapUserDtoToUser(userDto)));
 
         final User actual = userService.findByEmail(USER_EMAIL);
-        assertEquals(userDto, actual);
+        assertEquals(user, actual);
         verify(userRepository).findByEmail(USER_EMAIL);
     }
 
@@ -181,5 +173,17 @@ public class UserServiceImplTest {
         userDto.setPhoneNumber(PHONE_NUMBER);
 
         return userDto;
+    }
+
+    private User getUser() {
+        User user = new User();
+        user.setId(USER_ID);
+        user.setFirstName(FIRST_NAME);
+        user.setLastName(LAST_NAME);
+        user.setEmail(USER_EMAIL);
+        user.setPassword(PASSWORD);
+        user.setPhoneNumber(PHONE_NUMBER);
+        user.setRoleType(ROLE_TYPE);
+        return user;
     }
 }
