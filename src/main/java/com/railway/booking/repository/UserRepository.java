@@ -1,6 +1,6 @@
 package com.railway.booking.repository;
 
-import com.railway.booking.model.User;
+import com.railway.booking.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

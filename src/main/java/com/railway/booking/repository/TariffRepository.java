@@ -1,7 +1,7 @@
 package com.railway.booking.repository;
 
-import com.railway.booking.model.CarriageType;
-import com.railway.booking.model.Tariff;
+import com.railway.booking.entity.CarriageType;
+import com.railway.booking.entity.Tariff;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

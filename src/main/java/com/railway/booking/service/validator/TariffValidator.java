@@ -1,15 +1,14 @@
 package com.railway.booking.service.validator;
 
-import com.railway.booking.model.Tariff;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.railway.booking.entity.Tariff;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Log4j2
 @Component
 public class TariffValidator implements Validator<Tariff> {
-    private static final Logger LOGGER = LogManager.getLogger(TariffValidator.class);
 
     @Override
     public boolean isValid(Tariff entity) {
@@ -19,7 +18,7 @@ public class TariffValidator implements Validator<Tariff> {
             validateRate(entity.getRate());
             isValid = true;
         } catch (ValidateException e) {
-            LOGGER.warn("Tariff entity validation exception occurred");
+            log.warn("Tariff entity validation exception occurred");
         }
         return isValid;
     }
@@ -29,7 +28,7 @@ public class TariffValidator implements Validator<Tariff> {
         if (id == null || id < 0) {
             String message = String.format("Provided tariff id: %d is not correct," +
                     "id couldn't be null or negative", id);
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }
@@ -38,7 +37,7 @@ public class TariffValidator implements Validator<Tariff> {
         if (rate == null || rate.compareTo(BigDecimal.ZERO) <= 0) {
             String message = ("Provided tariff rate: is not correct," +
                     "rate couldn't be null or negative");
-            LOGGER.warn(message);
+            log.warn(message);
             throw new ValidateException(message);
         }
     }

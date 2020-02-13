@@ -1,32 +1,31 @@
 package com.railway.booking.service.impl;
 
-import com.railway.booking.model.Order;
+import com.railway.booking.entity.Order;
 import com.railway.booking.repository.OrderRepository;
-import com.railway.booking.repository.domain.Page;
 import com.railway.booking.service.OrderService;
+import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.validator.OrderValidator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {
-    private static final Logger LOGGER = LogManager.getLogger(OrderServiceImpl.class);
-
     private static final Integer MAX_ORDER_PER_PAGE = 5;
 
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
+    private final PageProvider pageProvider;
+
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderValidator orderValidator) {
+    public OrderServiceImpl(OrderRepository orderRepository, OrderValidator orderValidator, PageProvider pageProvider) {
         this.orderRepository = orderRepository;
         this.orderValidator = orderValidator;
+        this.pageProvider = pageProvider;
     }
 
     @Override
@@ -44,23 +43,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Order> findAll(int pageNumber) {
-        int maxPage = getMaxPage();
-        if (pageNumber <= 0) {
-            pageNumber = 1;
-        } else if (pageNumber >= maxPage) {
-            pageNumber = maxPage;
-        }
-        new Page(pageNumber, MAX_ORDER_PER_PAGE);
-        return orderRepository.findAll();
-    }
+    public Page<Order> findAll(String page) {
+        int currentPage = pageProvider.getPageNumberFromString(page);
 
-    private int getMaxPage() {
-        int totalUsers = (int) orderRepository.count();
-        int page = totalUsers / MAX_ORDER_PER_PAGE;
-        if (totalUsers % MAX_ORDER_PER_PAGE != 0) {
-            page++;
-        }
-        return page == 0 ? 1 : page;
+        int evalPage = (currentPage < 1) ? 1 : (currentPage - 1);
+        evalPage = evalPage > pageProvider.getMaxPage(MAX_ORDER_PER_PAGE, (int) orderRepository.count()) ? 0 : evalPage;
+
+        return orderRepository.findAll(PageRequest.of(evalPage, MAX_ORDER_PER_PAGE));
     }
 }

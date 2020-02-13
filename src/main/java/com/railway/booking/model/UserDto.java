@@ -1,8 +1,12 @@
-package com.railway.booking.entity;
+package com.railway.booking.model;
 
-import com.railway.booking.model.RoleType;
+import com.railway.booking.entity.RoleType;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
+@ToString
+@EqualsAndHashCode
 @Component
 public class UserDto {
 

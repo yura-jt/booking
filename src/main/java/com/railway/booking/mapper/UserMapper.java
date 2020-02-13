@@ -1,28 +1,27 @@
 package com.railway.booking.mapper;
 
-import com.railway.booking.entity.UserDto;
-import com.railway.booking.entity.UserEntity;
-import com.railway.booking.model.User;
+import com.railway.booking.model.UserDto;
+import com.railway.booking.model.ModelUser;
+import com.railway.booking.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper implements Mapper<UserEntity, User> {
+public class UserMapper implements Mapper<ModelUser, User> {
     @Override
-    public UserEntity mapDomainToEntity(User item) {
+    public ModelUser mapDomainToEntity(User item) {
         return item == null ? null :
-                UserEntity.builder()
-                        .withId(item.getId())
-                        .withFirstName(item.getFirstName())
-                        .withLastName(item.getLastName())
-                        .withEmail(item.getEmail())
-                        .withPassword(item.getPassword())
-                        .withPhoneNumber(item.getPhoneNumber())
-                        .withRoleType(item.getRoleType())
+                ModelUser.builder().id(item.getId())
+                        .firstName(item.getFirstName())
+                        .lastName(item.getLastName())
+                        .email(item.getEmail())
+                        .password(item.getPassword())
+                        .phoneNumber(item.getPhoneNumber())
+                        .roleType(item.getRoleType())
                         .build();
     }
 
     @Override
-    public User mapEntityToDomain(UserEntity entity) {
+    public User mapEntityToDomain(ModelUser entity) {
         if (entity == null) {
             return null;
         }
@@ -42,7 +41,6 @@ public class UserMapper implements Mapper<UserEntity, User> {
         if (userDto == null) {
             return null;
         }
-
         User user = new User();
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
@@ -50,7 +48,6 @@ public class UserMapper implements Mapper<UserEntity, User> {
         user.setPassword(userDto.getPassword());
         user.setPhoneNumber(userDto.getPhoneNumber());
         user.setRoleType(userDto.getRoleType());
-
         return user;
     }
 
@@ -59,12 +56,11 @@ public class UserMapper implements Mapper<UserEntity, User> {
             return null;
         }
         UserDto userDto = new UserDto();
-        user.setFirstName(user.getFirstName());
-        user.setLastName(user.getLastName());
-        user.setEmail(user.getEmail());
-        user.setPassword(user.getPassword());
-        user.setPhoneNumber(user.getPhoneNumber());
-        user.setRoleType(user.getRoleType());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        userDto.setPassword(user.getPassword());
+        userDto.setPhoneNumber(user.getPhoneNumber());
 
         return userDto;
     }

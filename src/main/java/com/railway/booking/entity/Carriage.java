@@ -1,4 +1,4 @@
-package com.railway.booking.model;
+package com.railway.booking.entity;
 
 import lombok.Data;
 
@@ -12,9 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -22,31 +20,30 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "seats")
-public class Seat {
+@Table(name = "carriages")
+public class Carriage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer integer;
+    private Integer id;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name = "bill_id")
-    private Bill bill;
+    @Enumerated(value = EnumType.STRING)
+    @NotNull
+    @Column(name = "type")
+    private CarriageType type;
 
     @NotNull
     @Column(name = "number", nullable = false)
     private Integer number;
 
-    @ManyToOne
-    @JoinColumn(name = "carriage_id", foreignKey = @ForeignKey(name = "seats_carriages_FK"))
-    private Carriage carriage;
-
-    @Enumerated(value = EnumType.STRING)
     @NotNull
-    @Column(name = "status")
-    private SeatStatus status;
+    @Column(name = "capacity", nullable = false)
+    private Integer capacity;
 
-    @OneToMany(mappedBy = "seat")
-    private List<Ticket> seats = new ArrayList<>();
+    @ManyToOne
+    @JoinColumn(name = "flight_id", foreignKey = @ForeignKey(name = "carriages_flights_FK"))
+    private Flight flight;
+
+    @OneToMany(mappedBy = "carriage")
+    private List<Seat> carriages = new ArrayList<>();
 
 }

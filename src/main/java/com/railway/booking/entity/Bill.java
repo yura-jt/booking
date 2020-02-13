@@ -1,4 +1,4 @@
-package com.railway.booking.model;
+package com.railway.booking.entity;
 
 import lombok.Data;
 

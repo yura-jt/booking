@@ -1,8 +1,7 @@
 package com.railway.booking.service;
 
-import com.railway.booking.model.Order;
-
-import java.util.List;
+import com.railway.booking.entity.Order;
+import org.springframework.data.domain.Page;
 
 public interface OrderService {
 
@@ -10,5 +9,5 @@ public interface OrderService {
 
     void update(Order order);
 
-    List<Order> findAll(int pageNumber);
+    Page<Order> findAll(String pageNumber);
 }
