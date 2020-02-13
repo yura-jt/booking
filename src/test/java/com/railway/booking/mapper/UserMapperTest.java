@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+
 public class UserMapperTest {
     private final static UserMapper USER_MAPPER = new UserMapper();
     private static final Integer USER_ID = 1;
