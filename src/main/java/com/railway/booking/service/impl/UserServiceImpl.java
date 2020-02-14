@@ -1,8 +1,9 @@
 package com.railway.booking.service.impl;
 
+import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.mapper.UserMapper;
-import com.railway.booking.model.UserDto;
+import com.railway.booking.model.UserEntity;
 import com.railway.booking.repository.UserRepository;
 import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.UserService;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Log4j2
 @Service
 @AllArgsConstructor
-@Transactional
 public class UserServiceImpl implements UserService {
     private static final int USER_PER_PAGE = 5;
 
@@ -31,16 +31,18 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean register(UserDto userDto) {
-        if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            String message = String.format("User with such e-mail: %s is already exist", userDto.getEmail());
+    public boolean register(UserEntity userEntity) {
+        if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
+            String message = String.format("User with such e-mail: %s is already exist", userEntity.getEmail());
             log.warn(message);
             return false;
         }
 
-        String encodedPassword = passwordEncoder.encode(userDto.getPassword());
-        userDto.setPassword(encodedPassword);
-        User user = userMapper.mapUserDtoToUser(userDto);
+        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
+        userEntity.setPassword(encodedPassword);
+        User user = userMapper.mapEntityToDomain(userEntity);
+        user.setRoleType(RoleType.PASSENGER);
+
         userRepository.save(user);
         return true;
     }
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByEmail(String email) {
+        System.out.println("findByMail = " + email);
         return userRepository.findByEmail(email).orElse(null);
     }
 

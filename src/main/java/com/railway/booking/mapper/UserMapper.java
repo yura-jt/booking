@@ -1,16 +1,17 @@
 package com.railway.booking.mapper;
 
-import com.railway.booking.model.UserDto;
-import com.railway.booking.model.ModelUser;
 import com.railway.booking.entity.User;
+import com.railway.booking.model.UserDto;
+import com.railway.booking.model.UserEntity;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMapper implements Mapper<ModelUser, User> {
+public class UserMapper implements Mapper<UserEntity, User> {
     @Override
-    public ModelUser mapDomainToEntity(User item) {
+    public UserEntity mapDomainToEntity(User item) {
         return item == null ? null :
-                ModelUser.builder().id(item.getId())
+                UserEntity.builder().id(item.getId())
                         .firstName(item.getFirstName())
                         .lastName(item.getLastName())
                         .email(item.getEmail())
@@ -21,7 +22,7 @@ public class UserMapper implements Mapper<ModelUser, User> {
     }
 
     @Override
-    public User mapEntityToDomain(ModelUser entity) {
+    public User mapEntityToDomain(UserEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -62,6 +63,16 @@ public class UserMapper implements Mapper<ModelUser, User> {
         userDto.setPassword(user.getPassword());
         userDto.setPhoneNumber(user.getPhoneNumber());
 
+        return userDto;
+    }
+
+    public UserDto mapUserEntityToUserDto(UserEntity userEntity) {
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(userEntity.getFirstName());
+        userDto.setLastName(userEntity.getLastName());
+        userDto.setEmail(userEntity.getEmail());
+        userDto.setPassword(userEntity.getPassword());
+        userDto.setPhoneNumber(userEntity.getPhoneNumber());
         return userDto;
     }
 }
