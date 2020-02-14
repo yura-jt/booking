@@ -1,40 +1,60 @@
-Configuration:
-  status: warn
-
-  appenders:
+Configutation:
+  name: Default
+  Properties:
+    Property:
+      name: log-path
+      value: "logs"
+  Appenders:
     Console:
-      name: LogToConsole
+      name: Console_Appender
+      target: SYSTEM_OUT
       PatternLayout:
-        Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+    File:
+      name: File_Appender
+      fileName: ${log-path}/logfile.log
+      PatternLayout:
+        pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
 
-    #File:
-    #  name: File
-    #  fileName: logs/app.log
-    #  PatternLayout:
-    #    Pattern: "%d %p %C{1.} [%t] %m%n"
 
-    RollingFile:
-      - name: LogToRollingFile
-        fileName: logs/app.log
-        filePattern: "logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz"
-        PatternLayout:
-          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
-        Policies:
-          SizeBasedTriggeringPolicy:
-            size: 10MB
-        DefaultRollOverStrategy:
-          max: 10
-
-  Loggers:
-    logger:
-      - name: com.mkyong
-        level: debug
-        additivity: false
-        AppenderRef:
-          - ref: LogToConsole
-          - ref: LogToRollingFile
-
-    Root:
-      level: error
-      AppenderRef:
-        ref: LogToConsole
+#Configuration:
+#  status: warn
+#
+#  appenders:
+#    Console:
+#      name: LogToConsole
+#      PatternLayout:
+#        Pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+#
+#    #File:
+#    #  name: File
+#    #  fileName: logs/app.log
+#    #  PatternLayout:
+#    #    Pattern: "%d %p %C{1.} [%t] %m%n"
+#
+#    RollingFile:
+#      - name: LogToRollingFile
+#        fileName: logs/app.log
+#        filePattern: "logs/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz"
+#        PatternLayout:
+#          pattern: "[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"
+#        Policies:
+#          SizeBasedTriggeringPolicy:
+#            size: 10MB
+#        DefaultRollOverStrategy:
+#          max: 10
+#
+#  Loggers:
+#    logger:
+#      - name: booking
+#        level: debug
+#        additivity: false
+#        AppenderRef:
+#          - ref: LogToConsole
+#          - ref: LogToRollingFile
+#
+#    Root:
+#      level: error
+#      AppenderRef:
+#          - ref: LogToConsole
+#          - ref: LogToRollingFile

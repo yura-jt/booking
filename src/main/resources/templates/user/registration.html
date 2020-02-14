@@ -35,8 +35,9 @@
                 </div>
                 <div class="card-body">
 
-                    <form class="form-horizontal" method="post" action="registration">
-
+                    <!--                    <form class="form-horizontal" method="post" action="registration">-->
+                    <form  action="#" th:action="@{/registration}" th:object="${userEntity}" method="post" class="form-horizontal"
+                           role="form">
                         <div class="form-group">
                             <label for="first_name" class="cols-sm-2 control-label">
                                 <span th:text="#{first.name.field}"></span>
@@ -45,8 +46,10 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-user fa"
                                                                        aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="first_name" id="first_name"
+
+                                    <input type="text" th:field="*{firstName}" class="form-control" name="first_name" id="first_name"
                                            th:placeholder="#{enter.first.name}" />
+                                    <td th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">Invalid first name</td>
                                 </div>
                             </div>
                         </div>
@@ -58,8 +61,10 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-user fa"
                                                                        aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="last_name" id="lastname"
+                                    <input type="text" th:field="*{lastName}" class="form-control" name="last_name" id="lastname"
                                            th:placeholder="#{enter.last.name}" />
+                                    <td th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Invalid last name</td>
+
                                 </div>
                             </div>
                         </div>
@@ -70,8 +75,9 @@
                             <div class="cols-sm-10">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="email" id="email"
+                                    <input type="text" th:field="*{email}" class="form-control" name="email" id="email"
                                            th:placeholder="#{enter.email}" />
+                                    <td th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Invalid email</td>
                                 </div>
                             </div>
                         </div>
@@ -83,8 +89,9 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-users fa"
                                                                        aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="phone_number" id="phonenumber"
-                                           th:placeholder="#{enter.phone.number}" />
+                                    <input type="text" th:field="*{phoneNumber}" class="form-control" name="phone_number" id="phonenumber"
+                                           th:placeholder="#{enter.phone.number}"  />
+                                    <td th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">Invalid phone number</td>
                                 </div>
                             </div>
                         </div>
@@ -95,8 +102,9 @@
                             <div class="cols-sm-10">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                                    <input type="password" class="form-control" name="password" id="password"
-                                           th:placeholder="#{enter.password}"/>
+                                    <input type="password" th:field="*{password}" class="form-control" name="password" id="password"
+                                           th:placeholder="#{enter.password}" />
+                                    <td th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Unappropriated password</td>
                                 </div>
                             </div>
                         </div>
@@ -109,6 +117,7 @@
                                     <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
                                     <input type="password" class="form-control" name="password_repeated"
                                            id="password_repeated" th:placeholder="#{enter.confirm.password}" />
+                                    <td th:if="${#fields.hasErrors('repeatedPassword')}" th:errors="*{repeatedPassword}">Unappropriated password</td>
                                 </div>
                             </div>
                         </div>
@@ -120,12 +129,12 @@
                                     class="btn btn-primary btn-lg btn-block login-button">
                                 <span th:text="#{register.button}"></span>
                             </button>
-<!--                            <%-- <input type="submit" value="Submit"/>--%>-->
-<!--                            <%---->
-<!--                            <div align="center"><a href="registration">-->
-<!--                                <span th:text="#{register.button}"></span>-->
-<!--                            </a></div>-->
-<!--                            --%>-->
+                            <!--                            <%-- <input type="submit" value="Submit"/>--%>-->
+                            <!--                            <%---->
+                            <!--                            <div align="center"><a href="registration">-->
+                            <!--                                <span th:text="#{register.button}"></span>-->
+                            <!--                            </a></div>-->
+                            <!--                            --%>-->
                         </div>
                     </form>
                 </div>

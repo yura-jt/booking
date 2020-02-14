@@ -3,7 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.mapper.UserMapper;
-import com.railway.booking.model.UserDto;
+import com.railway.booking.model.UserEntity;
 import com.railway.booking.repository.UserRepository;
 import com.railway.booking.service.validator.UserValidator;
 import org.junit.After;
@@ -41,7 +41,7 @@ public class UserServiceImplTest {
     private static final String INCORRECT_PASSWORD = "INCORRECT_PASSWORD";
     private static final String ENCODE_INCORRECT_PASSWORD = "encode_incorrect_password";
 
-    private UserDto userDto = getUserDto();
+    private UserEntity userEntity = getUserEntity();
     private User user = getUser();
 
     @Mock
@@ -83,9 +83,9 @@ public class UserServiceImplTest {
     public void userShouldRegisterSuccessfully() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(any())).thenReturn(ENCODED_PASSWORD);
-        when(userMapper.mapUserDtoToUser(any())).thenReturn(user);
+        when(userMapper.mapEntityToDomain(any())).thenReturn(user);
 
-        userService.register(userDto);
+        userService.register(userEntity);
 
         verify(userRepository).findByEmail(anyString());
         verify(userRepository).save(any(User.class));
@@ -95,13 +95,13 @@ public class UserServiceImplTest {
     public void userShouldNotRegisterAsEmailIsAlreadyUsed() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
-        userService.register(userDto);
+        userService.register(userEntity);
         verifyZeroInteractions(passwordEncoder);
     }
 
     @Test
     public void findByIdShouldReturnSavedUser() {
-        userService.register(userDto);
+        userService.register(userEntity);
         when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
 
         final User actual = userService.findById(USER_ID);
@@ -111,7 +111,7 @@ public class UserServiceImplTest {
 
     @Test
     public void findByIdShouldReturnNull() {
-        userService.register(userDto);
+        userService.register(userEntity);
         when(userRepository.findById(USER_ID + 1)).thenReturn(Optional.empty());
 
         final User actual = userService.findById(USER_ID + 1);
@@ -121,7 +121,7 @@ public class UserServiceImplTest {
 
     @Test
     public void findByEmailShouldReturnNull() {
-        userService.register(userDto);
+        userService.register(userEntity);
         when(userRepository.findByEmail("1@mail")).thenReturn(Optional.empty());
 
         final User actual = userService.findByEmail("1@mail");
@@ -129,15 +129,15 @@ public class UserServiceImplTest {
         verify(userRepository).findByEmail("1@mail");
     }
 
-    private static UserDto getUserDto() {
-        UserDto userDto = new UserDto();
-        userDto.setFirstName(FIRST_NAME);
-        userDto.setLastName(LAST_NAME);
-        userDto.setEmail(USER_EMAIL);
-        userDto.setPassword(PASSWORD);
-        userDto.setPhoneNumber(PHONE_NUMBER);
+    private UserEntity getUserEntity() {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setFirstName(FIRST_NAME);
+        userEntity.setLastName(LAST_NAME);
+        userEntity.setEmail(USER_EMAIL);
+        userEntity.setPassword(PASSWORD);
+        userEntity.setPhoneNumber(PHONE_NUMBER);
 
-        return userDto;
+        return userEntity;
     }
 
     private User getUser() {
