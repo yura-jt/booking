@@ -13,9 +13,17 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static java.util.Collections.singletonList;
 
 @Log4j2
 @Service
@@ -37,20 +45,13 @@ public class UserServiceImpl implements UserService {
             log.warn(message);
             return false;
         }
-
         String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
         userEntity.setPassword(encodedPassword);
         User user = userMapper.mapEntityToDomain(userEntity);
-        user.setRoleType(RoleType.PASSENGER);
 
+        user.setRoleType(RoleType.PASSENGER);
         userRepository.save(user);
         return true;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public User login(String email, String password) {
-        return validateUser(email, password);
     }
 
     @Override
@@ -77,6 +78,24 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email).orElse(null);
     }
 
+    @Override
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        String email = authentication.getName();
+        String password = authentication.getCredentials().toString();
+
+        User user = userRepository.findByEmail(email).orElse(null);
+        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+            return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user));
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean supports(Class<?> authentication) {
+        return true;
+    }
+
     private boolean isValidCredentials(String email, String password) {
         boolean isValid = false;
         try {
@@ -92,23 +111,7 @@ public class UserServiceImpl implements UserService {
         return isValid;
     }
 
-    private User validateUser(String email, String password) {
-        if (!isValidCredentials(email, password)) {
-            String message = String.format("User with such e-mail: %s is already exist", email);
-            log.warn(message);
-            return null;
-        }
-        User user = userRepository.findByEmail(email).orElse(null);
-
-        String encryptPassword = passwordEncoder.encode(password);
-        return isPasswordValid(user, encryptPassword) ? user : null;
-    }
-
-    private boolean isPasswordValid(User user, String encryptPassword) {
-        if (user == null || !user.getPassword().equals(encryptPassword)) {
-            log.warn("Provided password is not matched");
-            return false;
-        }
-        return true;
+    private List<SimpleGrantedAuthority> getAuthorities(User user) {
+        return singletonList(new SimpleGrantedAuthority(user.getRoleType().name()));
     }
 }

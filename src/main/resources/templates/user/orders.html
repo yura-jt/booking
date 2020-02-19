@@ -7,8 +7,8 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link type="text/css" href="../static/css/pagination.css"
-          th:href="@{css/pagination.css}" rel="stylesheet" media="screen"/>
+    <link type="text/css" href="../../static/css/pagination.css"
+          th:href="@{../../static/css/pagination.css}" rel="stylesheet" media="screen"/>
 
 </head>
 <body id="LoginForm" th:style="'background: url(/static/img/blur.jpg) no-repeat center center fixed;'">
@@ -16,14 +16,17 @@
     <h1><span th:text="#{app.title}"></span></h1>
 
     <ul class="nav nav-pills">
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.en}" th:href="@{${currentUrl}(lang=en)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.en}"
+               th:href="@{/user/orders(lang='en', page=${pageParam})}">Active</a>
         </li>
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.ru}" th:href="@{${currentUrl}(lang=ru)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.ru}"
+               th:href="@{/user/orders(lang='ru', page=${pageParam})}">Active</a>
         </li>
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.ua}" th:href="@{${currentUrl}(lang=ua)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.ua}"
+               th:href="@{/user/orders(lang='ua', page=${pageParam})}">Active</a>
         </li>
     </ul>
     <div class="container">
@@ -66,24 +69,24 @@
                         <div th:if="${orders.totalPages != 1}" class="box-footer clearfix">
                             <ul class="pagination pagination-sm no-margin pull-right">
                                 <li th:class="${orders.number == 0} ? disabled">
-                                    <a class="pageLink" href="/orders?page=1">&laquo;</a>
+                                    <a class="pageLink" href="/user/orders?page=1">&laquo;</a>
                                     <!--                                    <a class="pageLink" th:href="@{/orders(lang=${lang},page=1)}"></a>-->
                                 </li>
                                 <li th:class="${orders.number == 0} ? disabled">
-                                    <a class="pageLink" th:href="@{/orders(page=${orders.number})}">&larr;</a>
+                                    <a class="pageLink" th:href="@{/user/orders(page=${orders.number})}">&larr;</a>
                                 </li>
                                 <li th:class="${orders.number == (page - 1)} ? 'active pointer-disabled'"
                                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                                    <a class="pageLink" th:href="@{/orders(page=${page})}"
+                                    <a class="pageLink" th:href="@{/user/orders(page=${page})}"
                                        th:text="${page}"></a>
                                 </li>
                                 <li th:class="${orders.number + 1 == orders.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/orders(page=${orders.number + 2})}">&rarr;</a>
+                                       th:href="@{/user/orders(page=${orders.number + 2})}">&rarr;</a>
                                 </li>
                                 <li th:class="${orders.number + 1 == orders.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/orders(page=${orders.totalPages})}">&raquo;</a>
+                                       th:href="@{/user/orders(page=${orders.totalPages})}">&raquo;</a>
                                 </li>
                             </ul>
                         </div>
@@ -95,6 +98,6 @@
 </div>
 <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/static/js/app.js}"></script>
 </body>
 </html>

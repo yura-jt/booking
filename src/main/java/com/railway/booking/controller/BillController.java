@@ -17,9 +17,9 @@ public class BillController {
     @Autowired
     private BillService billService;
 
-    @GetMapping(value = "/bill")
+    @GetMapping(value = "/user/bill")
     public ModelAndView bills(@RequestParam(name = "page", required = false) String page) {
-        ModelAndView modelAndView = new ModelAndView("ticket/bill");
+        ModelAndView modelAndView = new ModelAndView("user/bill");
 
         Page<Bill> bills = billService.findAll(page);
 

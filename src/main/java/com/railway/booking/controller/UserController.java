@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -24,11 +25,17 @@ public class UserController implements WebMvcConfigurer {
 
     private UserService userService;
 
-    @GetMapping(value = {"/", "/login"})
-    public ModelAndView login() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("user/login");
-        return modelAndView;
+
+    @GetMapping(value = {"/"})
+    public ModelAndView loginPage(@RequestParam(value = "error",required = false) String error) {
+
+        ModelAndView model = new ModelAndView();
+        if (error != null) {
+            model.addObject("loginError", "Invalid Credentials provided.");
+        }
+
+        model.setViewName("login");
+        return model;
     }
 
     @GetMapping("/logout")
@@ -37,28 +44,27 @@ public class UserController implements WebMvcConfigurer {
         if (session != null) {
             session.invalidate();
         }
-        return new ModelAndView("login");
+        return new ModelAndView("/");
     }
 
-    @GetMapping(value = {"/profile"})
+    @GetMapping(value = {"/user/profile"})
     public String profile() {
         return "user/profile";
     }
 
-    @PostMapping(value = {"/profile"})
+    @PostMapping(value = {"/user/profile"})
     public String performLogin() {
-        return "user/profile";
+        return "redirect:user/profile";
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/user/login").setViewName("user/login");
+        registry.addViewController("/login").setViewName("/login");
     }
 
     @GetMapping("/registration")
     public String registerForm(UserEntity userEntity) {
-        log.warn("TESTING CHANGE CONFIGURATION");
-        return "user/registration";
+        return "registration";
     }
 
     @PostMapping("/registration")
@@ -76,9 +82,9 @@ public class UserController implements WebMvcConfigurer {
                             "Repeated password doesn't match");
         }
         if (bindingResult.hasErrors()) {
-            return "user/registration";
+            return "registration";
         }
         userService.register(userEntity);
-        return "redirect:/user/login";
+        return "redirect:/login";
     }
 }

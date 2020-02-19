@@ -18,11 +18,11 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(value = "/orders")
+    @GetMapping(value = "/user/orders")
     public ModelAndView bills(
             Model model,
             @RequestParam(name = "page", required = false) String page) {
-        ModelAndView modelAndView = new ModelAndView("ticket/orders");
+        ModelAndView modelAndView = new ModelAndView("user/orders");
 
         Page<Order> orders = orderService.findAll(page);
 

@@ -7,8 +7,8 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link type="text/css" href="../static/css/pagination.css"
-          th:href="@{css/pagination.css}" rel="stylesheet" media="screen"/>
+    <link type="text/css" href="/static/css/pagination.css"
+          th:href="@{/static/css/pagination.css}" rel="stylesheet" media="screen"/>
 
 </head>
 <body id="LoginForm" th:style="'background: url(/static/img/blur.jpg) no-repeat center center fixed;'">
@@ -16,20 +16,23 @@
     <h1><span th:text="#{app.title}"></span></h1>
 
     <ul class="nav nav-pills">
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.en}" th:href="@{${currentUrl}(lang=en)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.en}"
+               th:href="@{/user/bill(lang='en', page=${pageParam})}">Active</a>
         </li>
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.ru}" th:href="@{${currentUrl}(lang=ru)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.ru}"
+               th:href="@{/user/bill(lang='ru', page=${pageParam})}">Active</a>
         </li>
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.ua}" th:href="@{${currentUrl}(lang=ua)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.ua}"
+               th:href="@{/user/bill(lang='ua', page=${pageParam})}">Active</a>
         </li>
     </ul>
     <div class="container">
 
         <div class="alert alert-info">
-            <a href="profile" class="btn btn-xs btn-primary pull-right"><span th:text="#{profile.button}"></span></a>
+            <a href="/user/profile" class="btn btn-xs btn-primary pull-right"><span th:text="#{profile.button}"></span></a>
             <strong><span th:text="#{proceed.profile}"></span></strong>
         </div>
 
@@ -53,8 +56,8 @@
                                     <th>Created on</th>
                                 </tr>
                                 <tr th:each="bill : ${bills}">
-                                    <td th:text="${bill.getOrderId()}"></td>
-                                    <td th:text="${bill.getStatus()}"></td>
+                                    <td th:text="${bill.getOrder().getId()}"></td>
+                                    <td th:text="${bill.getBillStatus()}"></td>
                                     <td th:text="${bill.getPrice()}"></td>
                                     <td th:text="${bill.getCreatedOn()}"></td>
                                 </tr>
@@ -64,24 +67,24 @@
                         <div th:if="${bills.totalPages != 1}" class="box-footer clearfix">
                             <ul class="pagination pagination-sm no-margin pull-right">
                                 <li th:class="${bills.number == 0} ? disabled">
-                                    <a class="pageLink" href="/bill?page=1">&laquo;</a>
+                                    <a class="pageLink" href="/user/bill?page=1">&laquo;</a>
                                     <!--                                    <a class="pageLink" th:href="@{/bills(lang=${lang},page=1)}"></a>-->
                                 </li>
                                 <li th:class="${bills.number == 0} ? disabled">
-                                    <a class="pageLink" th:href="@{/bill(page=${bills.number})}">&larr;</a>
+                                    <a class="pageLink" th:href="@{/user/bill(page=${bills.number})}">&larr;</a>
                                 </li>
                                 <li th:class="${bills.number == (page - 1)} ? 'active pointer-disabled'"
                                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                                    <a class="pageLink" th:href="@{/bill(page=${page})}"
+                                    <a class="pageLink" th:href="@{/user/bill(page=${page})}"
                                        th:text="${page}"></a>
                                 </li>
                                 <li th:class="${bills.number + 1 == bills.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/bill(page=${bills.number + 2})}">&rarr;</a>
+                                       th:href="@{/user/bill(page=${bills.number + 2})}">&rarr;</a>
                                 </li>
                                 <li th:class="${bills.number + 1 == bills.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/bill(page=${bills.totalPages})}">&raquo;</a>
+                                       th:href="@{/user/bill(page=${bills.totalPages})}">&raquo;</a>
                                 </li>
                             </ul>
                         </div>
@@ -93,6 +96,6 @@
 </div>
 <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/static/js/app.js}"></script>
 </body>
 </html>

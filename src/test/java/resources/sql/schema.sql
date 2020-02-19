@@ -11,11 +11,9 @@ Email is a unique value.
 - All tables (except link tables) should have a single-value identifier of type INT(10), which is a primary key
 - All primary key, foreign key, and unique constraint should be named according to the naming convention.
 
-- All primary keys should be named according to the following rule "table_name_PK"
 - All foreign keys should be named according to the following rule "table_name_reference_table_name_FK"
 - All alternative keys (unique) should be named according to the following rule "table_name_column_name_AK"
 */
-
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tickets;
 DROP TABLE IF EXISTS stations;

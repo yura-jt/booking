@@ -7,8 +7,8 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link type="text/css" href="../static/css/pagination.css"
-          th:href="@{css/pagination.css}" rel="stylesheet" media="screen"/>
+    <link type="text/css" href="/static/css/pagination.css"
+          th:href="@{/static/css/pagination.css}" rel="stylesheet" media="screen"/>
 
 </head>
 <body id="LoginForm" th:style="'background: url(/static/img/blur.jpg) no-repeat center center fixed;'">
@@ -16,20 +16,23 @@
     <h1><span th:text="#{app.title}"></span></h1>
 
     <ul class="nav nav-pills">
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.en}" th:href="@{${currentUrl}(lang=en)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.en}"
+               th:href="@{/user/tickets(lang='en', page=${pageParam})}">Active</a>
         </li>
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.ru}" th:href="@{${currentUrl}(lang=ru)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.ru}"
+               th:href="@{/user/tickets(lang='ru', page=${pageParam})}">Active</a>
         </li>
-        <li class="nav-item" th:with="currentUrl=(${#httpServletRequest.requestURI + '?' + #strings.defaultString(#httpServletRequest.queryString, '')})">
-            <a class="nav-link" th:text="#{switch.ua}" th:href="@{${currentUrl}(lang=ua)}">Active</a>
+        <li class="nav-item" th:with="pageParam=(${#httpServletRequest.getParameter('page')})">
+            <a class="nav-link" th:text="#{switch.ua}"
+               th:href="@{/user/tickets(lang='ua', page=${pageParam})}">Active</a>
         </li>
     </ul>
     <div class="container">
 
         <div class="alert alert-info">
-            <a href="profile" class="btn btn-xs btn-primary pull-right"><span th:text="#{profile.button}"></span></a>
+            <a href="/user/profile" class="btn btn-xs btn-primary pull-right"><span th:text="#{profile.button}"></span></a>
             <strong><span th:text="#{proceed.profile}"></span></strong>
         </div>
 
@@ -54,7 +57,7 @@
                                     <th>Price</th>
                                     <th>Created On</th>
                                 </tr>
-                                <tr th:each="tickets : ${ticket}">
+                                <tr th:each="ticket : ${tickets}">
                                     <td th:text="${ticket.getId()}"></td>
                                     <td th:text="${ticket.getDepartureStation()}"></td>
                                     <td th:text="${ticket.getDestinationStation()}"></td>
@@ -68,24 +71,24 @@
                         <div th:if="${tickets.totalPages != 1}" class="box-footer clearfix">
                             <ul class="pagination pagination-sm no-margin pull-right">
                                 <li th:class="${tickets.number == 0} ? disabled">
-                                    <a class="pageLink" href="/tickets?page=1">&laquo;</a>
-                                    <!--                                    <a class="pageLink" th:href="@{/trains(lang=${lang},page=1)}"></a>-->
+                                    <a class="pageLink" href="/user/tickets?page=1">&laquo;</a>
+<!--                                    <a class="pageLink" th:href="@{/trains(lang=${lang},page=1)}"></a>-->
                                 </li>
                                 <li th:class="${tickets.number == 0} ? disabled">
-                                    <a class="pageLink" th:href="@{/tickets(page=${tickets.number})}">&larr;</a>
+                                    <a class="pageLink" th:href="@{/user/tickets(page=${tickets.number})}">&larr;</a>
                                 </li>
                                 <li th:class="${tickets.number == (page - 1)} ? 'active pointer-disabled'"
                                     th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
-                                    <a class="pageLink" th:href="@{/tickets(page=${page})}"
+                                    <a class="pageLink" th:href="@{/user/tickets(page=${page})}"
                                        th:text="${page}"></a>
                                 </li>
                                 <li th:class="${tickets.number + 1 == tickets.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/tickets(page=${tickets.number + 2})}">&rarr;</a>
+                                       th:href="@{/user/tickets(page=${tickets.number + 2})}">&rarr;</a>
                                 </li>
                                 <li th:class="${tickets.number + 1 == tickets.totalPages} ? disabled">
                                     <a class="pageLink"
-                                       th:href="@{/tickets(page=${tickets.totalPages})}">&raquo;</a>
+                                       th:href="@{/user/tickets(page=${tickets.totalPages})}">&raquo;</a>
                                 </li>
                             </ul>
                         </div>
@@ -97,6 +100,6 @@
 </div>
 <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
-<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/static/js/app.js}"></script>
 </body>
 </html>

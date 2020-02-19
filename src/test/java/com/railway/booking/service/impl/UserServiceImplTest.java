@@ -18,11 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -68,18 +66,6 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void userShouldNotLoginAsThereIsNotUserWithSuchEmail() {
-        when(passwordEncoder.encode(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
-        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
-
-        final User user = userService.login(USER_EMAIL, PASSWORD);
-
-        assertNull(user);
-        verify(passwordEncoder).encode(eq(PASSWORD));
-        verify(userRepository).findByEmail(eq(USER_EMAIL));
-    }
-
-    @Test
     public void userShouldRegisterSuccessfully() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(any())).thenReturn(ENCODED_PASSWORD);
@@ -100,17 +86,8 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findByIdShouldReturnSavedUser() {
-        userService.register(userEntity);
-        when(userRepository.findById(USER_ID)).thenReturn(Optional.of(user));
-
-        final User actual = userService.findById(USER_ID);
-        assertEquals(user, actual);
-        verify(userRepository).findById(USER_ID);
-    }
-
-    @Test
     public void findByIdShouldReturnNull() {
+        when(userMapper.mapEntityToDomain(any())).thenReturn(user);
         userService.register(userEntity);
         when(userRepository.findById(USER_ID + 1)).thenReturn(Optional.empty());
 
@@ -120,8 +97,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findByEmailShouldReturnNull() {
-        userService.register(userEntity);
+    public void findByEmailShouldReturnNullIfEmailIsNotExist() {
         when(userRepository.findByEmail("1@mail")).thenReturn(Optional.empty());
 
         final User actual = userService.findByEmail("1@mail");
