@@ -5,14 +5,17 @@ import com.railway.booking.repository.OrderRepository;
 import com.railway.booking.service.OrderService;
 import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.validator.OrderValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private static final Integer MAX_ORDER_PER_PAGE = 5;
 
@@ -20,19 +23,11 @@ public class OrderServiceImpl implements OrderService {
     private final OrderValidator orderValidator;
     private final PageProvider pageProvider;
 
-
-    @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, OrderValidator orderValidator, PageProvider pageProvider) {
-        this.orderRepository = orderRepository;
-        this.orderValidator = orderValidator;
-        this.pageProvider = pageProvider;
-    }
-
     @Override
     @Transactional(readOnly = true)
-    public Order getById(Integer id) {
+    public Optional<Order> getById(Integer id) {
         orderValidator.validateId(id);
-        return orderRepository.findById(id).orElse(null);
+        return orderRepository.findById(id);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.railway.booking.model;
+package com.railway.booking.domain;
 
 import com.railway.booking.entity.RoleType;
 import lombok.AllArgsConstructor;

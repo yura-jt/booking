@@ -3,7 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.mapper.UserMapper;
-import com.railway.booking.model.UserEntity;
+import com.railway.booking.domain.UserEntity;
 import com.railway.booking.repository.UserRepository;
 import com.railway.booking.service.validator.UserValidator;
 import org.junit.After;
@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -86,13 +87,13 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findByIdShouldReturnNull() {
+    public void findByIdShouldReturnEmptyUser() {
         when(userMapper.mapEntityToDomain(any())).thenReturn(user);
         userService.register(userEntity);
         when(userRepository.findById(USER_ID + 1)).thenReturn(Optional.empty());
 
-        final User actual = userService.findById(USER_ID + 1);
-        assertNull(actual);
+        final Optional<User> actual = userService.findById(USER_ID + 1);
+        assertFalse(actual.isPresent());
         verify(userRepository).findById(USER_ID + 1);
     }
 
@@ -100,8 +101,8 @@ public class UserServiceImplTest {
     public void findByEmailShouldReturnNullIfEmailIsNotExist() {
         when(userRepository.findByEmail("1@mail")).thenReturn(Optional.empty());
 
-        final User actual = userService.findByEmail("1@mail");
-        assertNull(actual);
+        final Optional<User> actual = userService.findByEmail("1@mail");
+        assertFalse(actual.isPresent());
         verify(userRepository).findByEmail("1@mail");
     }
 

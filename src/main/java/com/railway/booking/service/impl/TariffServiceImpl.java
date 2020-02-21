@@ -4,7 +4,7 @@ import com.railway.booking.entity.CarriageType;
 import com.railway.booking.entity.Tariff;
 import com.railway.booking.repository.TariffRepository;
 import com.railway.booking.service.TariffService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,15 +13,11 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TariffServiceImpl implements TariffService {
     private static final Integer MAX_PER_PAGE = 20;
 
     private final TariffRepository tariffRepository;
-
-    @Autowired
-    public TariffServiceImpl(TariffRepository tariffRepository) {
-        this.tariffRepository = tariffRepository;
-    }
 
     @Override
     @Transactional

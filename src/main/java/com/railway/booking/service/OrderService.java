@@ -3,9 +3,11 @@ package com.railway.booking.service;
 import com.railway.booking.entity.Order;
 import org.springframework.data.domain.Page;
 
+import java.util.Optional;
+
 public interface OrderService {
 
-    Order getById(Integer id);
+    Optional<Order> getById(Integer id);
 
     void update(Order order);
 

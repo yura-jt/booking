@@ -2,8 +2,8 @@ package com.railway.booking.mapper;
 
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
-import com.railway.booking.model.UserDto;
-import com.railway.booking.model.UserEntity;
+import com.railway.booking.domain.UserDto;
+import com.railway.booking.domain.UserEntity;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

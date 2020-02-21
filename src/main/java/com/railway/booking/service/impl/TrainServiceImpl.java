@@ -5,14 +5,17 @@ import com.railway.booking.repository.TrainRepository;
 import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.TrainService;
 import com.railway.booking.service.validator.TrainValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class TrainServiceImpl implements TrainService {
     private static final Integer TRAIN_PER_PAGE = 5;
 
@@ -20,19 +23,11 @@ public class TrainServiceImpl implements TrainService {
     private final TrainRepository trainRepository;
     private final PageProvider pageProvider;
 
-    @Autowired
-    public TrainServiceImpl(TrainRepository trainRepository,
-                            TrainValidator trainValidator, PageProvider pageProvider) {
-        this.trainRepository = trainRepository;
-        this.trainValidator = trainValidator;
-        this.pageProvider = pageProvider;
-    }
-
     @Override
     @Transactional(readOnly = true)
-    public Train getById(Integer id) {
+    public Optional<Train> getById(Integer id) {
         trainValidator.validateId(id);
-        return trainRepository.findById(id).orElse(null);
+        return trainRepository.findById(id);
     }
 
     @Override

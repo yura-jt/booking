@@ -3,14 +3,14 @@ package com.railway.booking.service.impl;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.mapper.UserMapper;
-import com.railway.booking.model.UserEntity;
+import com.railway.booking.domain.UserEntity;
 import com.railway.booking.repository.UserRepository;
 import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.UserService;
 import com.railway.booking.service.validator.UserValidator;
 import com.railway.booking.service.validator.ValidateException;
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,12 +22,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.Collections.singletonList;
 
-@Log4j2
+@Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private static final int USER_PER_PAGE = 5;
 
@@ -67,15 +68,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public User findById(Integer id) {
+    public Optional<User> findById(Integer id) {
         userValidator.validateId(id);
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id);
     }
 
     @Override
-    public User findByEmail(String email) {
-        System.out.println("findByMail = " + email);
-        return userRepository.findByEmail(email).orElse(null);
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -83,11 +83,13 @@ public class UserServiceImpl implements UserService {
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = userRepository.findByEmail(email).orElse(null);
-        if (user != null && passwordEncoder.matches(password, user.getPassword())) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new SecurityException("User with such email is not exist"));
+        if (passwordEncoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user));
         } else {
-            return null;
+            String message = String.format("User with email: %s performed unsuccessful login attempt", email);
+            log.warn(message);
+            throw new SecurityException(message);
         }
     }
 

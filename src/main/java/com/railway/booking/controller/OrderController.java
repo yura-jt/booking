@@ -3,7 +3,7 @@ package com.railway.booking.controller;
 import com.railway.booking.entity.Order;
 import com.railway.booking.entity.Pager;
 import com.railway.booking.service.OrderService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequiredArgsConstructor
 public class OrderController {
     private static final int PAGE_SIZES = 5;
 
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
     @GetMapping(value = "/user/orders")
     public ModelAndView bills(

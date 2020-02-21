@@ -1,9 +1,8 @@
 package com.railway.booking.mapper;
 
 import com.railway.booking.entity.User;
-import com.railway.booking.model.UserDto;
-import com.railway.booking.model.UserEntity;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import com.railway.booking.domain.UserDto;
+import com.railway.booking.domain.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component

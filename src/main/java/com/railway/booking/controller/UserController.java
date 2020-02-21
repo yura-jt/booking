@@ -1,10 +1,10 @@
 package com.railway.booking.controller;
 
 import com.railway.booking.entity.User;
-import com.railway.booking.model.UserEntity;
+import com.railway.booking.domain.UserEntity;
 import com.railway.booking.service.UserService;
-import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,17 +17,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Optional;
 
-@Log4j2
+@Slf4j
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController implements WebMvcConfigurer {
 
-    private UserService userService;
-
+    private final UserService userService;
 
     @GetMapping(value = {"/"})
-    public ModelAndView loginPage(@RequestParam(value = "error",required = false) String error) {
+    public ModelAndView loginPage(@RequestParam(value = "error", required = false) String error) {
 
         ModelAndView model = new ModelAndView();
         if (error != null) {
@@ -69,8 +69,8 @@ public class UserController implements WebMvcConfigurer {
 
     @PostMapping("/registration")
     public String register(@Valid UserEntity userEntity, BindingResult bindingResult) {
-        User user = userService.findByEmail(userEntity.getEmail());
-        if (user != null) {
+        Optional<User> user = userService.findByEmail(userEntity.getEmail());
+        if (!user.isPresent()) {
             bindingResult
                     .rejectValue("email", "error.user",
                             "There is already a user registered with the email provided");

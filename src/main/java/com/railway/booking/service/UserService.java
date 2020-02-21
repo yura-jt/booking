@@ -1,19 +1,19 @@
 package com.railway.booking.service;
 
 import com.railway.booking.entity.User;
-import com.railway.booking.model.UserEntity;
+import com.railway.booking.domain.UserEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.security.authentication.AuthenticationProvider;
 
-public interface UserService extends AuthenticationProvider {
+import java.util.Optional;
 
-//    User login(String email, String password);
+public interface UserService extends AuthenticationProvider {
 
     boolean register(UserEntity userEntity);
 
     Page<User> findAll(String pageNumber);
 
-    User findById(Integer id);
+    Optional<User> findById(Integer id);
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 }

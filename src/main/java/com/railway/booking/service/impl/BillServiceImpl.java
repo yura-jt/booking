@@ -6,27 +6,23 @@ import com.railway.booking.repository.BillRepository;
 import com.railway.booking.service.BillService;
 import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.validator.BillValidator;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BillServiceImpl implements BillService {
     private static final int BILL_PER_PAGE = 5;
 
     private final BillRepository billRepository;
     private final BillValidator billValidator;
     private final PageProvider pageProvider;
-
-    @Autowired
-    public BillServiceImpl(BillRepository billRepository, BillValidator billValidator, PageProvider pageProvider) {
-        this.billRepository = billRepository;
-        this.billValidator = billValidator;
-        this.pageProvider = pageProvider;
-    }
 
     @Override
     public void payBill(Bill bill) {
@@ -45,9 +41,9 @@ public class BillServiceImpl implements BillService {
 
     @Override
     @Transactional(readOnly = true)
-    public Bill getById(Integer id) {
+    public Optional<Bill> getById(Integer id) {
         billValidator.validateId(id);
-        return billRepository.findById(id).orElse(null);
+        return billRepository.findById(id);
     }
 
     @Override
