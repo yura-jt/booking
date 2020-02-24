@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @AllArgsConstructor
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserService userService;
+    private CustomAuthenticationSuccessHandler successHandler;
 
     @Override
     protected void configure(final HttpSecurity http) throws Exception {
@@ -31,6 +32,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .usernameParameter("email")
                 .passwordParameter("password")
                 .successForwardUrl("/user/profile").permitAll()
+                .successHandler(successHandler)
 
                 .and()
                 .logout()
