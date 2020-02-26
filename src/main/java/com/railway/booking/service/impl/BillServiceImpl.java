@@ -5,6 +5,7 @@ import com.railway.booking.entity.BillStatus;
 import com.railway.booking.repository.BillRepository;
 import com.railway.booking.service.BillService;
 import com.railway.booking.service.PageProvider;
+import com.railway.booking.service.util.Constants;
 import com.railway.booking.service.validator.BillValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,6 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class BillServiceImpl implements BillService {
-    private static final int BILL_PER_PAGE = 5;
-
     private final BillRepository billRepository;
     private final BillValidator billValidator;
     private final PageProvider pageProvider;
@@ -52,8 +51,9 @@ public class BillServiceImpl implements BillService {
         int currentPage = pageProvider.getPageNumberFromString(page);
 
         int evalPage = (currentPage < 1) ? 1 : (currentPage - 1);
-        evalPage = evalPage > pageProvider.getMaxPage(BILL_PER_PAGE, (int) billRepository.count()) ? 0 : evalPage;
+        evalPage = evalPage > pageProvider.getMaxPage(Constants.ITEM_PER_PAGE,
+                (int) billRepository.count()) ? 0 : evalPage;
 
-        return billRepository.findAll(PageRequest.of(evalPage, BILL_PER_PAGE));
+        return billRepository.findAll(PageRequest.of(evalPage, Constants.ITEM_PER_PAGE));
     }
 }

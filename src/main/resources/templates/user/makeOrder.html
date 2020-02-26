@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+<head>
+    <title>Railway ticket booking</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/static/js/modernizr.custom.js"></script>
+    <link  href="../../static/css/default.css"
+           th:href="@{/css/default.css}" rel="stylesheet"  media="screen"/>
+    <link href="../../static/css/component.css"
+          th:href="@{/css/component.css}" rel="stylesheet"  media="screen"/>
+</head>
+<body>
+<div class="container">
+    <img src="http://i.piccy.info/i9/b869ed99199dbc216732e7b323ecd45f/1582457398/16646/1364039/train_logo_400px.jpg"
+         alt=""  width="399" height="98"/>
+    <header class="clearfix">
+
+        <span><span th:text="#{app.title}"></span></span>
+        <h1><span th:text="#{profile.title}"></span></h1>
+
+        <nav>
+            <a href="makeOrder?lang=en" class="bp-icon bp-icon-next" th:data-info="#{switch.en}"><span><span th:text="#{switch.en}"></span></span></a>
+            <a href="makeOrder?lang=ua" class="bp-icon bp-icon-drop" th:data-info="#{switch.ua}"><span><span th:text="#{switch.ua}"></span></span></a>
+            <a href="makeOrder?lang=ru" class="bp-icon bp-icon-archive" th:data-info="#{switch.ru}"><span><span th:text="#{switch.ru}"></span></span></a>
+        </nav>
+    </header>
+    <div class="main">
+        <nav class="cbp-hsmenu-wrapper" id="cbp-hsmenu-wrapper">
+            <div class="cbp-hsinner">
+                <ul class="cbp-hsmenu">
+                    <li><a href="#"><span th:text="#{profile.make.order}"></span></a></li>
+                    <li><a href="/user/trains"><span th:text="#{profile.tran.schedule}"></span></a></li>
+                    <li><a href="/user/tickets"><span th:text="#{profile.my.tickets}"></span></a></li>
+                    <li><a href="/user/bill"><span th:text="#{profile.my.bills}"></span></a></li>
+                    <li><a href="/user/orders"><span th:text="#{profile.my.orders}"></span></a></li>
+                    <li><a href="/logout"><span th:text="#{profile.log.out}"></span></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="login-form">
+        <div class="main-div">
+            <div class="panel">
+                <h3><span style="color: #266b9c; "><span th:text="#{make.order.title}"></span></span></h3>
+
+                <form class="form-horizontal" action="#r">
+                    <fieldset>
+                        <div class="form-group row">
+                            <label class="col-md-4 control-label"><span th:text="#{make.order.departure}"></span></label>
+
+                            <div class="col-md-4">
+                                <input type="text" name = "departure" class="form-control" id="departure">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 control-label"><span th:text="#{make.order.destination}"></span></label>
+                            <div class="col-md-4">
+                                <input type="text" name = "destination" class="form-control" id="destination">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-4 control-label"><span th:text="#{make.order.fromTime}"></span></label>
+                            <div class="col-md-4">
+                                <div>
+                                    <input type="time" id="appt" name="from_time"
+                                           value="00:00" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-4 control-label"><span th:text="#{make.order.toTime}"></span></label>
+                            <div class="col-md-4">
+                                <div>
+                                    <input type="time" id="to_time" name="to_time"
+                                           value="23:59" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            $(document).ready(function () {
+                                $('#datePicker')
+                                    .datepicker({
+                                        format: 'mm/dd/yyyy'
+                                    })
+                                    .on('changeDate', function (e) {
+                                        // Revalidate the date field
+                                        $('#eventForm').formValidation('revalidateField', 'date');
+                                    });
+
+                                $('#eventForm').formValidation({
+                                    framework: 'bootstrap',
+                                    icon: {
+                                        valid: 'glyphicon glyphicon-ok',
+                                        invalid: 'glyphicon glyphicon-remove',
+                                        validating: 'glyphicon glyphicon-refresh'
+                                    },
+                                    fields: {
+                                        name: {
+                                            validators: {
+                                                notEmpty: {
+                                                    message: 'The name is required'
+                                                }
+                                            }
+                                        },
+                                        date: {
+                                            validators: {
+                                                notEmpty: {
+                                                    message: 'The date is required'
+                                                },
+                                                date: {
+                                                    format: 'MM/DD/YYYY',
+                                                    message: 'The date is not a valid'
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
+
+                        <div class="form-group row">
+                            <label class="col-md-4 control-label"><span th:text="#{make.order.date}"></span></label>
+                            <div class="col-xs-5 date">
+                                <div class="input-group input-append date row" id="datePicker">
+                                    <input type="text" class="form-control" name="date"/>
+                                    <span class="input-group-addon add-on"><span
+                                            class="glyphicon glyphicon-calendar"></span></span>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group row">
+                            <label class="col-md-4 control-label" for="singlebutton"></label>
+                            <div class="col-md-4">
+                                <button id="singlebutton" name="singlebutton" class="btn btn-primary"><span th:text="#{make.order.find}"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+</body>
+</html>

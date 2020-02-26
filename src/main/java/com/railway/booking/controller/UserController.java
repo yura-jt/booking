@@ -23,7 +23,6 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 public class UserController implements WebMvcConfigurer {
-
     private final UserService userService;
 
     @GetMapping(value = {"/"})

@@ -7,6 +7,7 @@ import com.railway.booking.domain.UserEntity;
 import com.railway.booking.repository.UserRepository;
 import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.UserService;
+import com.railway.booking.service.util.Constants;
 import com.railway.booking.service.validator.UserValidator;
 import com.railway.booking.service.validator.ValidateException;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +31,6 @@ import static java.util.Collections.singletonList;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    private static final int USER_PER_PAGE = 5;
-
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserValidator userValidator;
@@ -61,9 +60,10 @@ public class UserServiceImpl implements UserService {
         int currentPage = pageProvider.getPageNumberFromString(page);
 
         int evalPage = (currentPage < 1) ? 1 : (currentPage - 1);
-        evalPage = evalPage > pageProvider.getMaxPage(USER_PER_PAGE, (int) userRepository.count()) ? 0 : evalPage;
+        evalPage = evalPage > pageProvider.getMaxPage(Constants.ITEM_PER_PAGE,
+                (int) userRepository.count()) ? 0 : evalPage;
 
-        return userRepository.findAll(PageRequest.of(evalPage, USER_PER_PAGE));
+        return userRepository.findAll(PageRequest.of(evalPage, Constants.ITEM_PER_PAGE));
     }
 
     @Override
@@ -83,7 +83,8 @@ public class UserServiceImpl implements UserService {
         String email = authentication.getName();
         String password = authentication.getCredentials().toString();
 
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new SecurityException("User with such email is not exist"));
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new SecurityException("User with such email is not exist"));
         if (passwordEncoder.matches(password, user.getPassword())) {
             return new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), getAuthorities(user));
         } else {

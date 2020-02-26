@@ -3,6 +3,7 @@ package com.railway.booking.controller;
 import com.railway.booking.entity.Order;
 import com.railway.booking.entity.Pager;
 import com.railway.booking.service.OrderService;
+import com.railway.booking.service.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -14,8 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequiredArgsConstructor
 public class OrderController {
-    private static final int PAGE_SIZES = 5;
-
     private final OrderService orderService;
 
     @GetMapping(value = "/user/orders")
@@ -29,10 +28,15 @@ public class OrderController {
         Pager pager = new Pager(orders.getTotalPages(), orders.getNumber());
 
         modelAndView.addObject("orders", orders);
-        modelAndView.addObject("selectedPageSize", PAGE_SIZES);
-        modelAndView.addObject("pageSizes", PAGE_SIZES);
+        modelAndView.addObject("selectedPageSize", Constants.ITEM_PER_PAGE);
+        modelAndView.addObject("pageSizes", Constants.ITEM_PER_PAGE);
         modelAndView.addObject("pager", pager);
 
         return modelAndView;
+    }
+
+    @GetMapping(value = "/user/makeOrder")
+    public String makeOrder() {
+        return "user/makeOrder";
     }
 }

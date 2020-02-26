@@ -3,6 +3,7 @@ package com.railway.booking.controller;
 import com.railway.booking.entity.Bill;
 import com.railway.booking.entity.Pager;
 import com.railway.booking.service.BillService;
+import com.railway.booking.service.util.Constants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -13,8 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequiredArgsConstructor
 public class BillController {
-    private static final int PAGE_SIZES = 5;
-
     private final BillService billService;
 
     @GetMapping(value = "/user/bill")
@@ -26,8 +25,8 @@ public class BillController {
         Pager pager = new Pager(bills.getTotalPages(), bills.getNumber());
 
         modelAndView.addObject("bills", bills);
-        modelAndView.addObject("selectedPageSize", PAGE_SIZES);
-        modelAndView.addObject("pageSizes", PAGE_SIZES);
+        modelAndView.addObject("selectedPageSize", Constants.ITEM_PER_PAGE);
+        modelAndView.addObject("pageSizes", Constants.ITEM_PER_PAGE);
         modelAndView.addObject("pager", pager);
 
         return modelAndView;

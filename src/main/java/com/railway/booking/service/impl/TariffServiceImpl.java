@@ -15,8 +15,6 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class TariffServiceImpl implements TariffService {
-    private static final Integer MAX_PER_PAGE = 20;
-
     private final TariffRepository tariffRepository;
 
     @Override

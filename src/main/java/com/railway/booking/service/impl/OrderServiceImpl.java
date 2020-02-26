@@ -4,6 +4,7 @@ import com.railway.booking.entity.Order;
 import com.railway.booking.repository.OrderRepository;
 import com.railway.booking.service.OrderService;
 import com.railway.booking.service.PageProvider;
+import com.railway.booking.service.util.Constants;
 import com.railway.booking.service.validator.OrderValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,8 +18,6 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private static final Integer MAX_ORDER_PER_PAGE = 5;
-
     private final OrderRepository orderRepository;
     private final OrderValidator orderValidator;
     private final PageProvider pageProvider;
@@ -42,8 +41,9 @@ public class OrderServiceImpl implements OrderService {
         int currentPage = pageProvider.getPageNumberFromString(page);
 
         int evalPage = (currentPage < 1) ? 1 : (currentPage - 1);
-        evalPage = evalPage > pageProvider.getMaxPage(MAX_ORDER_PER_PAGE, (int) orderRepository.count()) ? 0 : evalPage;
+        evalPage = evalPage > pageProvider.getMaxPage(Constants.ITEM_PER_PAGE,
+                (int) orderRepository.count()) ? 0 : evalPage;
 
-        return orderRepository.findAll(PageRequest.of(evalPage, MAX_ORDER_PER_PAGE));
+        return orderRepository.findAll(PageRequest.of(evalPage, Constants.ITEM_PER_PAGE));
     }
 }
