@@ -1,9 +1,9 @@
 package com.railway.booking.service.impl;
 
+import com.railway.booking.domain.ModelUser;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.mapper.UserMapper;
-import com.railway.booking.domain.UserEntity;
 import com.railway.booking.repository.UserRepository;
 import com.railway.booking.service.PageProvider;
 import com.railway.booking.service.UserService;
@@ -39,15 +39,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public boolean register(UserEntity userEntity) {
-        if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
-            String message = String.format("User with such e-mail: %s is already exist", userEntity.getEmail());
+    public boolean register(ModelUser modelUser) {
+        if (userRepository.findByEmail(modelUser.getEmail()).isPresent()) {
+            String message = String.format("User with such e-mail: %s is already exist", modelUser.getEmail());
             log.warn(message);
             return false;
         }
-        String encodedPassword = passwordEncoder.encode(userEntity.getPassword());
-        userEntity.setPassword(encodedPassword);
-        User user = userMapper.mapEntityToDomain(userEntity);
+        String encodedPassword = passwordEncoder.encode(modelUser.getPassword());
+        modelUser.setPassword(encodedPassword);
+        User user = userMapper.mapModelToEntity(modelUser);
 
         user.setRoleType(RoleType.PASSENGER);
         userRepository.save(user);

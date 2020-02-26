@@ -1,9 +1,9 @@
 package com.railway.booking.service.impl;
 
+import com.railway.booking.domain.ModelUser;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.mapper.UserMapper;
-import com.railway.booking.domain.UserEntity;
 import com.railway.booking.repository.UserRepository;
 import com.railway.booking.service.validator.UserValidator;
 import org.junit.After;
@@ -40,7 +40,7 @@ public class UserServiceImplTest {
     private static final String INCORRECT_PASSWORD = "INCORRECT_PASSWORD";
     private static final String ENCODE_INCORRECT_PASSWORD = "encode_incorrect_password";
 
-    private UserEntity userEntity = getUserEntity();
+    private ModelUser modelUser = getModelUser();
     private User user = getUser();
 
     @Mock
@@ -70,9 +70,9 @@ public class UserServiceImplTest {
     public void userShouldRegisterSuccessfully() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(any())).thenReturn(ENCODED_PASSWORD);
-        when(userMapper.mapEntityToDomain(any())).thenReturn(user);
+        when(userMapper.mapModelToEntity(any())).thenReturn(user);
 
-        userService.register(userEntity);
+        userService.register(modelUser);
 
         verify(userRepository).findByEmail(anyString());
         verify(userRepository).save(any(User.class));
@@ -82,14 +82,14 @@ public class UserServiceImplTest {
     public void userShouldNotRegisterAsEmailIsAlreadyUsed() {
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
 
-        userService.register(userEntity);
+        userService.register(modelUser);
         verifyZeroInteractions(passwordEncoder);
     }
 
     @Test
     public void findByIdShouldReturnEmptyUser() {
-        when(userMapper.mapEntityToDomain(any())).thenReturn(user);
-        userService.register(userEntity);
+        when(userMapper.mapModelToEntity(any())).thenReturn(user);
+        userService.register(modelUser);
         when(userRepository.findById(USER_ID + 1)).thenReturn(Optional.empty());
 
         final Optional<User> actual = userService.findById(USER_ID + 1);
@@ -106,15 +106,15 @@ public class UserServiceImplTest {
         verify(userRepository).findByEmail("1@mail");
     }
 
-    private UserEntity getUserEntity() {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setFirstName(FIRST_NAME);
-        userEntity.setLastName(LAST_NAME);
-        userEntity.setEmail(USER_EMAIL);
-        userEntity.setPassword(PASSWORD);
-        userEntity.setPhoneNumber(PHONE_NUMBER);
+    private ModelUser getModelUser() {
+        ModelUser modelUser = new ModelUser();
+        modelUser.setFirstName(FIRST_NAME);
+        modelUser.setLastName(LAST_NAME);
+        modelUser.setEmail(USER_EMAIL);
+        modelUser.setPassword(PASSWORD);
+        modelUser.setPhoneNumber(PHONE_NUMBER);
 
-        return userEntity;
+        return modelUser;
     }
 
     private User getUser() {

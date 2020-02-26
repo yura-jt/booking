@@ -3,7 +3,7 @@ package com.railway.booking.mapper;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.domain.UserDto;
-import com.railway.booking.domain.UserEntity;
+import com.railway.booking.domain.ModelUser;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,17 +21,17 @@ public class UserMapperTest {
 
     private final User user = getUser();
     private final UserDto userDto = getUserDto();
-    private final UserEntity userEntity = getUserEntity();
+    private final ModelUser modelUser = getModelUser();
 
 
     @Test
     public void mapDomainToEntityShouldReturnCorrectEntity() {
-        assertEquals(userEntity, USER_MAPPER.mapDomainToEntity(user));
+        assertEquals(modelUser, USER_MAPPER.mapEntityToModel(user));
     }
 
     @Test
     public void mapEntityToDomainShouldReturnCorrectDomainUser() {
-        assertEquals(user, USER_MAPPER.mapEntityToDomain(userEntity));
+        assertEquals(user, USER_MAPPER.mapModelToEntity(modelUser));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class UserMapperTest {
 
     @Test
     public void mapUserEntityToUserDto() {
-        assertEquals(userDto, USER_MAPPER.mapUserEntityToUserDto(userEntity));
+        assertEquals(userDto, USER_MAPPER.mapModelUserToUserDto(modelUser));
     }
 
     private User getUser() {
@@ -62,8 +62,8 @@ public class UserMapperTest {
         return user;
     }
 
-    private UserEntity getUserEntity() {
-        return UserEntity.builder().id(USER_ID)
+    private ModelUser getModelUser() {
+        return ModelUser.builder().id(USER_ID)
                 .firstName(FIRST_NAME)
                 .lastName(LAST_NAME)
                 .email(USER_EMAIL)

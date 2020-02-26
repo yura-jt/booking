@@ -18,7 +18,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @Setter
 @EqualsAndHashCode
-public class UserEntity {
+public class ModelUser {
 
     private Integer id;
 

@@ -1,7 +1,7 @@
 package com.railway.booking.controller;
 
 import com.railway.booking.entity.User;
-import com.railway.booking.domain.UserEntity;
+import com.railway.booking.domain.ModelUser;
 import com.railway.booking.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,20 +62,20 @@ public class UserController implements WebMvcConfigurer {
     }
 
     @GetMapping("/registration")
-    public String registerForm(UserEntity userEntity) {
+    public String registerForm(ModelUser modelUser) {
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String register(@Valid UserEntity userEntity, BindingResult bindingResult) {
-        Optional<User> user = userService.findByEmail(userEntity.getEmail());
-        if (!user.isPresent()) {
+    public String register(@Valid ModelUser modelUser, BindingResult bindingResult) {
+        Optional<User> user = userService.findByEmail(modelUser.getEmail());
+        if (user.isPresent()) {
             bindingResult
                     .rejectValue("email", "error.user",
                             "There is already a user registered with the email provided");
         }
-        String password = userEntity.getPassword();
-        if (password != null && password.equals(userEntity.getRepeatedPassword())) {
+        String password = modelUser.getPassword();
+        if (password != null && password.equals(modelUser.getRepeatedPassword())) {
             bindingResult
                     .rejectValue("password", "error.user",
                             "Repeated password doesn't match");
@@ -83,7 +83,7 @@ public class UserController implements WebMvcConfigurer {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        userService.register(userEntity);
+        userService.register(modelUser);
         return "redirect:/login";
     }
 }
